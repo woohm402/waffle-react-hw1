@@ -6,7 +6,12 @@ export const Modal = ({
   isOpen,
   onClose,
   children,
-}: PropsWithChildren<{ isOpen: boolean; onClose: () => void }>) => {
+  ...props
+}: PropsWithChildren<{
+  isOpen: boolean;
+  onClose: () => void;
+  "data-testid"?: string;
+}>) => {
   return (
     <div>
       <div
@@ -14,11 +19,14 @@ export const Modal = ({
         onClick={onClose}
       />
 
-      <div
-        className={classNames("modalContent", isOpen ? "visible" : "hidden")}
-      >
-        {isOpen && children}
-      </div>
+      {isOpen && (
+        <div
+          className={classNames("modalContent", isOpen ? "visible" : "hidden")}
+          {...props}
+        >
+          {children}
+        </div>
+      )}
     </div>
   );
 };

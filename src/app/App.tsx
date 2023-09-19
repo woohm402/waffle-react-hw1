@@ -61,7 +61,11 @@ export const App = () => {
           </li>
         ))}
       </ul>
-      <button className="addModal" onClick={() => setAddModalOpen(true)}>
+      <button
+        data-testid="write-review"
+        className="addModal"
+        onClick={() => setAddModalOpen(true)}
+      >
         +
       </button>
       <AddReviewModal
