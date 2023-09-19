@@ -23,8 +23,6 @@
   background-color: white;
   transition: opacity 0.3s ease-in-out;
   border-radius: 30px;
-  width: min(90vw, 400px);
-  height: min(90vh, 500px);
   padding: 30px;
 }
 
