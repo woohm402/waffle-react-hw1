@@ -1,27 +1,33 @@
-import { Review } from "../entities/review";
+import {
+  Review,
+  createReviewContent,
+  createReviewId,
+  createReviewImage,
+  createReviewRating,
+  createReviewSnackName,
+} from "../entities/review";
 import data from "../data.json";
 import { useState } from "react";
 import { ReviewItem } from "./components/ReviewItem";
 import "./reset.css";
 import "./App.css";
+import { AddReviewModal } from "./components/AddReviewModal";
 
 const initialData = data.map(
   ({ content, id, image, rating, snack_name }): Review => {
-    if (
-      rating !== 1 &&
-      rating !== 2 &&
-      rating !== 3 &&
-      rating !== 4 &&
-      rating !== 5
-    )
-      throw new Error("Invalid rating");
-
-    return { id, content, image, snackName: snack_name, rating };
+    return {
+      id: createReviewId(id),
+      content: createReviewContent(content),
+      image: createReviewImage(image),
+      snackName: createReviewSnackName(snack_name),
+      rating: createReviewRating(rating),
+    };
   }
 );
 
 export const App = () => {
   const [reviews, setReviews] = useState<Review[]>(initialData);
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
 
   return (
     <div className="wrapper">
@@ -55,6 +61,14 @@ export const App = () => {
           </li>
         ))}
       </ul>
+      <button className="addModal" onClick={() => setAddModalOpen(true)}>
+        +
+      </button>
+      <AddReviewModal
+        isOpen={isAddModalOpen}
+        onClose={() => setAddModalOpen(false)}
+        onAddReview={(newReview) => setReviews([newReview, ...reviews])}
+      />
     </div>
   );
 };

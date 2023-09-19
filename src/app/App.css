@@ -25,3 +25,18 @@
 .reviewList > li:not(:last-of-type) {
   margin-bottom: 20px;
 }
+
+.addModal {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  bottom: 40px;
+  right: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: chartreuse;
+  color: white;
+  font-size: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
