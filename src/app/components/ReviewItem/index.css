@@ -1,0 +1,22 @@
+.reviewItem {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid black;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.reviewItem > .reviewImage {
+  width: 100px;
+  border: 1px solid brown;
+  border-radius: 20px;
+}
+
+.reviewItem > div > .reviewName {
+  display: flex;
+  gap: 10px;
+}
+
+.reviewItem > div > .reviewContent {
+  margin-top: 10px;
+}
