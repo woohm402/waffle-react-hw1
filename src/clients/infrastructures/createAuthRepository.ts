@@ -1,5 +1,5 @@
-import { type AuthRepository } from '../repositories/AuthRepository';
-import { type ApiClient } from './../clients/ApiClient';
+import { type AuthRepository } from '../../repositories/AuthRepository';
+import { type ApiClient } from '../ApiClient';
 
 export const createAuthRepository = ({ apiClient }: { apiClient: ApiClient }): AuthRepository => {
   return {

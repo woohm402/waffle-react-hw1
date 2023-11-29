@@ -1,10 +1,10 @@
-import { useId, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 
 import { Button } from '../../../components/Button';
 import { Input } from '../../../components/Input';
 import { Modal } from '../../../components/Modal';
 import { serviceContext } from '../../../contexts/serviceContext';
-import { storeContext } from '../../../contexts/storeContext';
+import { useQuery } from '../../../hooks/useQuery';
 import { useTypedContext } from '../../../hooks/useTypedContext';
 import styles from './index.module.css';
 
@@ -12,16 +12,22 @@ type ReviewForm = Partial<{ snackTitle: string; rating: string; content: string 
 
 export const AddReviewModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const snackTitleId = useId();
-  const { reviewService } = useTypedContext(serviceContext);
+  const { reviewService, snackService } = useTypedContext(serviceContext);
   const [review, setReview] = useState<ReviewForm>({});
   const [errors, setErrors] = useState<Partial<Record<keyof ReviewForm, string>>>({});
-  const { snacks, createReview } = useTypedContext(storeContext);
+  const { data: snacks } = useQuery({ queryFn: useCallback(() => snackService.listSnacks(), [snackService]) });
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!snacks) return;
     const validationResult = reviewService.validateReview(review, snacks);
     if (!validationResult.valid) return setErrors(validationResult.errors);
-    createReview(validationResult.review);
-    handleClose();
+
+    try {
+      await reviewService.createReview(validationResult.review);
+      handleClose();
+    } catch (err) {
+      //
+    }
   };
 
   const handleClose = () => {
@@ -50,10 +56,8 @@ export const AddReviewModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
         />
         <datalist id={snackTitleId}>
           {snacks
-            .filter((s) => s.title.includes(review.snackTitle ?? ''))
-            .map((s) => (
-              <option key={s.id} value={s.title} />
-            ))}
+            ?.filter((s) => s.title.includes(review.snackTitle ?? ''))
+            .map((s) => <option key={s.id} value={s.title} />)}
         </datalist>
 
         <Input

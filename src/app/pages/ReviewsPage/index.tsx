@@ -1,27 +1,30 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { type Review } from '../../../entities/review';
 import { Button } from '../../components/Button';
 import { FAB } from '../../components/FAB';
 import { ReviewItem } from '../../components/ReviewItem';
-import { storeContext } from '../../contexts/storeContext';
+import { serviceContext } from '../../contexts/serviceContext';
+import { useQuery } from '../../hooks/useQuery';
 import { useTypedContext } from '../../hooks/useTypedContext';
 import { AddReviewModal } from './AddReviewModal';
 import styles from './index.module.css';
 
 export const ReviewsPage = () => {
-  const { reviews } = useTypedContext(storeContext);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [reviewState, setReviewState] = useState<{ state: 'idle' } | { state: 'edit'; id: Review['id'] }>({
     state: 'idle',
   });
   const navigate = useNavigate();
+  const { reviewService } = useTypedContext(serviceContext);
+
+  const { data: reviews } = useQuery({ queryFn: useCallback(() => reviewService.listReviews({}), [reviewService]) });
 
   return (
     <>
       <ul className={styles.reviewList} data-testid="review-list">
-        {reviews.map((review) => (
+        {reviews?.map((review) => (
           <li key={review.id}>
             <ReviewItem
               showProfile

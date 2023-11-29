@@ -5,20 +5,20 @@ import { createSnackSrc, createSnackTitle } from '../../../entities/snack';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { ProfileImage } from '../../components/ProfileImage';
-import { storeContext } from '../../contexts/storeContext';
+import { serviceContext } from '../../contexts/serviceContext';
 import { useTypedContext } from '../../hooks/useTypedContext';
 import styles from './index.module.css';
 
 export const SnackCreatePage = () => {
   const [src, setSrc] = useState('');
   const [title, setTitle] = useState('');
-  const { createSnack } = useTypedContext(storeContext);
 
   const navigate = useNavigate();
+  const { snackService } = useTypedContext(serviceContext);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     try {
-      const createdSnack = createSnack({ title: createSnackTitle(title), src: createSnackSrc(src) });
+      const createdSnack = await snackService.createSnack({ title: createSnackTitle(title), src: createSnackSrc(src) });
       navigate(`/snacks/${createdSnack.id}`);
     } catch (err) {
       console.log(err);
