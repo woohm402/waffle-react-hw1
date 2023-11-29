@@ -1,11 +1,13 @@
 import { type Brand, brand } from '../utils/brand';
 import { type Snack } from './snack';
+import { type User } from './user';
 
 export type Review = {
   id: Brand<number, 'ReviewId'>;
   snack: Snack;
   rating: Brand<1 | 2 | 3 | 4 | 5, 'ReviewRating'>;
   content: Brand<string, 'ReviewContent'>;
+  authorId: User['id'];
 };
 
 export const createReviewId = (id?: number): Review['id'] => brand(id ?? Date.now(), 'ReviewId');
