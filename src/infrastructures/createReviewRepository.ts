@@ -1,6 +1,6 @@
 import { type ApiClient } from '../clients/ApiClient';
 import { createReviewContent, createReviewId, createReviewRating } from '../entities/review';
-import { createSnackId, createSnackSrc, createSnackTitle } from '../entities/snack';
+import { createSnackId, createSnackRating, createSnackSrc, createSnackTitle } from '../entities/snack';
 import { createUserId } from '../entities/user';
 import { type ReviewRepository } from '../repositories/ReviewRepository';
 
@@ -38,6 +38,7 @@ export const createReviewRepository = ({ apiClient }: { apiClient: ApiClient }):
           id: createSnackId(review.snack.id),
           title: createSnackTitle(review.snack.name),
           src: createSnackSrc(review.snack.image),
+          rating: createSnackRating(review.snack.rating),
         },
         authorId: createUserId(review.author.id),
       }));
@@ -69,6 +70,7 @@ export const createReviewRepository = ({ apiClient }: { apiClient: ApiClient }):
           id: createSnackId(data.snack.id),
           title: createSnackTitle(data.snack.name),
           src: createSnackSrc(data.snack.image),
+          rating: createSnackRating(data.snack.rating),
         },
         authorId: createUserId(data.author.id),
       };
