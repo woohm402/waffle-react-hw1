@@ -1,0 +1,22 @@
+.header {
+  padding: 20px 40px;
+  background-color: bisque;
+  display: flex;
+  justify-content: start;
+}
+
+.header > a {
+  display: flex;
+  gap: 20px;
+  text-decoration: none;
+  color: black;
+  align-items: center;
+}
+
+.header > a > .logo {
+  width: 100px;
+}
+
+.title {
+  font-size: 28px;
+}
