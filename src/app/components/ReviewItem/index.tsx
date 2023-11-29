@@ -1,6 +1,8 @@
 import './index.css';
 
 import { type Review } from '../../../entities/review';
+import { storeContext } from '../../contexts/storeContext';
+import { useTypedContext } from '../../hooks/useTypedContext';
 
 export const ReviewItem = ({
   review,
@@ -22,12 +24,13 @@ export const ReviewItem = ({
   onEditReview: () => void;
   onDeleteReview: () => void;
 }) => {
+  const { snacks } = useTypedContext(storeContext);
+
   return (
     <div className="reviewItem" data-testid="review">
-      <img src={review.image} className="reviewImage" />
       <div>
         <div className="reviewName">
-          <strong>{review.snackName}</strong>
+          <strong>{snacks.find((s) => s.id === review.snackId)?.title}</strong>
           <span>/</span>
           <b>*{review.rating.toFixed(1)}</b>
           {state.state === 'idle' ? (

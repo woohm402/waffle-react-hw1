@@ -1,32 +1,26 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
-import { type Review } from '../../../entities/review';
-import { serviceContext } from '../../contexts/serviceContext';
-import { useTypedContext } from '../../hooks/useTypedContext';
-import { Button } from '../Button';
-import { Input } from '../Input';
-import { Modal } from '../Modal';
+import { Button } from '../../../components/Button';
+import { Input } from '../../../components/Input';
+import { Modal } from '../../../components/Modal';
+import { serviceContext } from '../../../contexts/serviceContext';
+import { storeContext } from '../../../contexts/storeContext';
+import { useTypedContext } from '../../../hooks/useTypedContext';
 import styles from './index.module.css';
 
-type ReviewForm = Omit<Partial<Record<keyof Review, string>>, 'id'>;
+type ReviewForm = Partial<{ snackTitle: string; rating: string; content: string }>;
 
-export const AddReviewModal = ({
-  isOpen,
-  onClose,
-  onAddReview,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  onAddReview: (review: Review) => void;
-}) => {
+export const AddReviewModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const snackTitleId = useId();
   const { reviewService } = useTypedContext(serviceContext);
   const [review, setReview] = useState<ReviewForm>({});
-  const [errors, setErrors] = useState<Partial<Record<keyof Review, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof ReviewForm, string>>>({});
+  const { snacks, createReview } = useTypedContext(storeContext);
 
   const handleSubmit = () => {
-    const validationResult = reviewService.validateReview(review);
+    const validationResult = reviewService.validateReview(review, snacks);
     if (!validationResult.valid) return setErrors(validationResult.errors);
-    onAddReview(validationResult.review);
+    createReview(validationResult.review);
     handleClose();
   };
 
@@ -46,21 +40,22 @@ export const AddReviewModal = ({
           handleSubmit();
         }}
       >
-        <div>{review.image && <img src={review.image} />}</div>
         <Input
-          label="이미지"
-          data-testid="image-input"
-          value={review.image ?? ''}
-          onChange={(e) => setReview({ ...review, image: e.target.value })}
-          errorMessage={errors.image}
-        />
-        <Input
+          list={snackTitleId}
           label="과자 이름"
           data-testid="name-input"
-          value={review.snackName ?? ''}
-          onChange={(e) => setReview({ ...review, snackName: e.target.value })}
-          errorMessage={errors.snackName}
+          value={review.snackTitle ?? ''}
+          onChange={(e) => setReview({ ...review, snackTitle: e.target.value })}
+          errorMessage={errors.snackTitle}
         />
+        <datalist id={snackTitleId}>
+          {snacks
+            .filter((s) => s.title.includes(review.snackTitle ?? ''))
+            .map((s) => (
+              <option key={s.id} value={s.title} />
+            ))}
+        </datalist>
+
         <Input
           label="평점"
           data-testid="rating-input"

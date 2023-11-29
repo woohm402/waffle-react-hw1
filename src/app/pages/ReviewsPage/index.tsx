@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { createReviewContent, type Review } from '../../../entities/review';
-import { AddReviewModal } from '../../components/AddReviewModal';
 import { Button } from '../../components/Button';
-import { DeleteReviewModal } from '../../components/DeleteReviewModal';
 import { FAB } from '../../components/FAB';
 import { ReviewItem } from '../../components/ReviewItem';
 import { storeContext } from '../../contexts/storeContext';
 import { useTypedContext } from '../../hooks/useTypedContext';
+import { AddReviewModal } from './AddReviewModal';
+import { DeleteReviewModal } from './DeleteReviewModal';
 import styles from './index.module.css';
 
 export const ReviewsPage = () => {
-  const { reviews, updateReview, createReview, deleteReview } = useTypedContext(storeContext);
+  const { reviews, updateReview, deleteReview } = useTypedContext(storeContext);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [reviewState, setReviewState] = useState<
     { state: 'idle' } | { state: 'edit'; id: Review['id']; draft: string } | { state: 'delete'; id: Review['id'] }
@@ -80,7 +80,7 @@ export const ReviewsPage = () => {
         </div>
       </FAB>
 
-      <AddReviewModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} onAddReview={createReview} />
+      <AddReviewModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} />
       <DeleteReviewModal
         reviewItem={reviewState.state === 'delete' ? reviews.find((r) => r.id === reviewState.id) ?? null : null}
         onClose={() => setReviewState({ state: 'idle' })}
