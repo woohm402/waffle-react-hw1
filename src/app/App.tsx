@@ -7,14 +7,26 @@ import { createReviewId, type Review } from '../entities/review';
 import { type Snack } from '../entities/snack';
 import { Layout } from './components/Layout';
 import { storeContext } from './contexts/storeContext';
-import { ReviewPage } from './pages/ReviewPage';
+import { ReviewsPage } from './pages/ReviewsPage';
+import { SnackCreatePage } from './pages/SnackCreatePage';
+import { SnacksPage } from './pages/SnacksPage';
+import { SnackViewPage } from './pages/SnackViewPage';
 
 export const App = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [snacks] = useState<Snack[]>([]);
 
   const router = createBrowserRouter([
-    { path: '/', element: <ReviewPage /> },
+    {
+      path: '/',
+      element: <Layout />,
+      children: [
+        { path: '/', element: <ReviewsPage /> },
+        { path: '/snacks', element: <SnacksPage /> },
+        { path: '/snacks/new', element: <SnackCreatePage /> },
+        { path: '/snacks/:snackId', element: <SnackViewPage /> },
+      ],
+    },
     { path: '*', element: <div>404</div> },
   ]);
 
@@ -38,9 +50,7 @@ export const App = () => {
         ),
       }}
     >
-      <Layout>
-        <RouterProvider router={router} />
-      </Layout>
+      <RouterProvider router={router} />
     </storeContext.Provider>
   );
 };
