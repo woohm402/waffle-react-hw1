@@ -1,88 +1,52 @@
-import {
-  createReviewContent,
-  createReviewId,
-  createReviewImage,
-  createReviewRating,
-  createReviewSnackName,
-  type Review,
-} from '../entities/review';
+import { createReviewContent, createReviewRating, type Review } from '../entities/review';
 import { type ReviewService } from '../usecases/ReviewService';
 
 export const createReviewService = (): ReviewService => {
   return {
-    validateReview: (reviewForm) => {
-      type ValidationResult<T extends keyof Review> =
-        | { valid: false; message: string }
-        | ({ valid: true } & Record<T, Review[T]>);
+    validateReview: (reviewForm, snacks) => {
+      type Invalid = { message: string; valid: false };
 
-      const imageResult = ((): ValidationResult<'image'> => {
+      const snackTitleResult = ((): { valid: true; snackId: Review['snackId'] } | Invalid => {
         try {
-          return { valid: true, image: createReviewImage(reviewForm.image) };
+          const snack = snacks.find((s) => s.title === reviewForm.snackTitle);
+          if (!snack) throw new Error();
+          return { valid: true, snackId: snack.id } as const;
         } catch (err) {
-          return { valid: false, message: '' } as const;
+          const message = '첫글자와 끝글자가 공백이 아닌 1~20자 문자열로 써주세요';
+          return { valid: false, message } as const;
         }
       })();
 
-      const snackNameResult = ((): ValidationResult<'snackName'> => {
-        try {
-          if (!reviewForm.snackName) throw new Error();
-          return {
-            valid: true,
-            snackName: createReviewSnackName(reviewForm.snackName),
-          };
-        } catch (err) {
-          return {
-            valid: false,
-            message: '첫글자와 끝글자가 공백이 아닌 1~20자 문자열로 써주세요',
-          };
-        }
-      })();
-
-      const contentResult = ((): ValidationResult<'content'> => {
+      const contentResult = ((): { valid: true; content: Review['content'] } | Invalid => {
         try {
           if (!reviewForm.content) throw new Error();
-          return {
-            valid: true,
-            content: createReviewContent(reviewForm.content),
-          };
+          const content = createReviewContent(reviewForm.content);
+          return { valid: true, content };
         } catch (err) {
-          return {
-            valid: false,
-            message: '첫글자와 끝글자가 공백이 아닌 5~1000자 문자열로 써주세요',
-          };
+          const message = '첫글자와 끝글자가 공백이 아닌 5~1000자 문자열로 써주세요';
+          return { valid: false, message };
         }
       })();
 
-      const ratingResult = ((): ValidationResult<'rating'> => {
+      const ratingResult = ((): { valid: true; rating: Review['rating'] } | Invalid => {
         try {
           if (!reviewForm.rating) throw new Error();
           return { valid: true, rating: createReviewRating(reviewForm.rating) };
         } catch (err) {
-          return {
-            valid: false,
-            message: '평점은 1 ~ 5 사이의 숫자로 써주세요',
-          };
+          return { valid: false, message: '평점은 1 ~ 5 사이의 숫자로 써주세요' };
         }
       })();
 
-      if (imageResult.valid && snackNameResult.valid && contentResult.valid && ratingResult.valid) {
+      if (snackTitleResult.valid && contentResult.valid && ratingResult.valid)
         return {
           valid: true,
-          review: {
-            id: createReviewId(),
-            image: imageResult.image,
-            snackName: snackNameResult.snackName,
-            content: contentResult.content,
-            rating: ratingResult.rating,
-          },
+          review: { snackId: snackTitleResult.snackId, content: contentResult.content, rating: ratingResult.rating },
         };
-      }
 
       return {
         valid: false,
         errors: {
-          ...(imageResult.valid ? {} : { image: imageResult.message }),
-          ...(snackNameResult.valid ? {} : { snackName: snackNameResult.message }),
+          ...(snackTitleResult.valid ? {} : { snackTitle: snackTitleResult.message }),
           ...(contentResult.valid ? {} : { content: contentResult.message }),
           ...(ratingResult.valid ? {} : { rating: ratingResult.message }),
         },

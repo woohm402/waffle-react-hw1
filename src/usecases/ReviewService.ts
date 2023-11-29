@@ -1,10 +1,14 @@
 import { type Review } from '../entities/review';
+import { type Snack } from '../entities/snack';
 
 export type ReviewService = {
-  validateReview: (reviewForm: Omit<Partial<Record<keyof Review, string>>, 'id'>) =>
+  validateReview: (
+    reviewForm: Partial<{ snackTitle: string; rating: string; content: string }>,
+    snacks: Snack[],
+  ) =>
     | {
         valid: false;
-        errors: Omit<Partial<Record<keyof Review, string>>, 'id'>;
+        errors: Partial<{ snackTitle: string; rating: string; content: string }>;
       }
-    | { valid: true; review: Review };
+    | { valid: true; review: Omit<Review, 'id'> };
 };
