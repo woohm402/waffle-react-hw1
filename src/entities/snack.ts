@@ -4,7 +4,7 @@ export type Snack = {
   id: Brand<number, 'SnackId'>;
   title: Brand<string, 'SnackTitle'>;
   src: Brand<string, 'SnackSrc'>;
-  rating: Brand<number, 'SnackRating'>;
+  rating: Brand<number, 'SnackRating'> | null;
 };
 
 export const createSnackId = (id?: number): Snack['id'] => brand(id ?? Date.now(), 'SnackId');
@@ -18,7 +18,9 @@ export const createSnackSrc = (src: string): Snack['src'] => {
   if (trimmed.length < 1) throw new Error();
   return brand(trimmed, 'SnackSrc');
 };
-export const createSnackRating = (rating: number): Snack['rating'] => {
+export const createSnackRating = (rating: number | null): Snack['rating'] => {
+  if (rating === null) return null;
+
   if (rating < 1 || rating > 5) throw new Error();
   return brand(rating, 'SnackRating');
 };

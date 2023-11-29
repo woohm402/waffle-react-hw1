@@ -7,7 +7,7 @@ export const SnackCard = ({ snack }: { snack: Snack }) => {
     <div className={styles.card}>
       <ProfileImage src={snack.src} />
       <p>{snack.title}</p>
-      <p>5.0</p>
+      <p className={styles.rating}>{snack.rating?.toPrecision(2)}</p>
     </div>
   );
 };
