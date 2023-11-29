@@ -5,35 +5,31 @@ import {
   createReviewImage,
   createReviewRating,
   createReviewSnackName,
-} from "../entities/review";
-import data from "../data.json";
-import { useState } from "react";
-import { ReviewItem } from "./components/ReviewItem";
-import "./reset.css";
-import "./App.css";
-import { AddReviewModal } from "./components/AddReviewModal";
-import { DeleteReviewModal } from "./components/DeleteReviewModal";
+} from '../entities/review';
+import data from '../data.json';
+import { useState } from 'react';
+import { ReviewItem } from './components/ReviewItem';
+import './reset.css';
+import './App.css';
+import { AddReviewModal } from './components/AddReviewModal';
+import { DeleteReviewModal } from './components/DeleteReviewModal';
 
-const initialData = data.map(
-  ({ content, id, image, rating, snack_name }): Review => {
-    return {
-      id: createReviewId(id),
-      content: createReviewContent(content),
-      image: createReviewImage(image),
-      snackName: createReviewSnackName(snack_name),
-      rating: createReviewRating(rating),
-    };
-  }
-);
+const initialData = data.map(({ content, id, image, rating, snack_name }): Review => {
+  return {
+    id: createReviewId(id),
+    content: createReviewContent(content),
+    image: createReviewImage(image),
+    snackName: createReviewSnackName(snack_name),
+    rating: createReviewRating(rating),
+  };
+});
 
 export const App = () => {
   const [reviews, setReviews] = useState<Review[]>(initialData);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [reviewState, setReviewState] = useState<
-    | { state: "idle" }
-    | { state: "edit"; id: number; draft: string }
-    | { state: "delete"; id: number }
-  >({ state: "idle" });
+    { state: 'idle' } | { state: 'edit'; id: number; draft: string } | { state: 'delete'; id: number }
+  >({ state: 'idle' });
 
   return (
     <div className="wrapper">
@@ -57,53 +53,40 @@ export const App = () => {
               review={review}
               onEditReview={() =>
                 setReviewState({
-                  state: "edit",
+                  state: 'edit',
                   id: review.id,
                   draft: review.content,
                 })
               }
-              onDeleteReview={() =>
-                setReviewState({ state: "delete", id: review.id })
-              }
+              onDeleteReview={() => setReviewState({ state: 'delete', id: review.id })}
               state={(() => {
-                if (reviewState.state === "idle") return { state: "idle" };
-                if (reviewState.state === "delete") return { state: "blocked" };
-                if (
-                  reviewState.state === "edit" &&
-                  reviewState.id !== review.id
-                )
-                  return { state: "blocked" };
+                if (reviewState.state === 'idle') return { state: 'idle' };
+                if (reviewState.state === 'delete') return { state: 'blocked' };
+                if (reviewState.state === 'edit' && reviewState.id !== review.id) return { state: 'blocked' };
                 return {
-                  state: "editing",
+                  state: 'editing',
                   draft: reviewState.draft,
-                  onChange: (e: string) =>
-                    setReviewState({ state: "edit", id: review.id, draft: e }),
+                  onChange: (e: string) => setReviewState({ state: 'edit', id: review.id, draft: e }),
                   onChangeSubmit: () => {
                     try {
                       const newReview = {
                         ...review,
                         content: createReviewContent(reviewState.draft),
                       };
-                      setReviews(
-                        reviews.map((r) => (r.id === review.id ? newReview : r))
-                      );
-                      setReviewState({ state: "idle" });
+                      setReviews(reviews.map((r) => (r.id === review.id ? newReview : r)));
+                      setReviewState({ state: 'idle' });
                     } catch (err) {
                       //
                     }
                   },
-                  onChangeCancel: () => setReviewState({ state: "idle" }),
+                  onChangeCancel: () => setReviewState({ state: 'idle' }),
                 };
               })()}
             />
           </li>
         ))}
       </ul>
-      <button
-        data-testid="write-review"
-        className="addModal"
-        onClick={() => setAddModalOpen(true)}
-      >
+      <button data-testid="write-review" className="addModal" onClick={() => setAddModalOpen(true)}>
         +
       </button>
       <AddReviewModal
@@ -112,17 +95,13 @@ export const App = () => {
         onAddReview={(newReview) => setReviews([newReview, ...reviews])}
       />
       <DeleteReviewModal
-        reviewItem={
-          reviewState.state === "delete"
-            ? reviews.find((r) => r.id === reviewState.id) ?? null
-            : null
-        }
-        onClose={() => setReviewState({ state: "idle" })}
+        reviewItem={reviewState.state === 'delete' ? reviews.find((r) => r.id === reviewState.id) ?? null : null}
+        onClose={() => setReviewState({ state: 'idle' })}
         onDelete={() => {
-          if (reviewState.state !== "delete") return;
+          if (reviewState.state !== 'delete') return;
 
           setReviews(reviews.filter((r) => r.id !== reviewState.id));
-          setReviewState({ state: "idle" });
+          setReviewState({ state: 'idle' });
         }}
       />
     </div>

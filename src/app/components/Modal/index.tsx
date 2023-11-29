@@ -1,6 +1,6 @@
-import { PropsWithChildren } from "react";
-import "./index.css";
-import { classNames } from "../../../utils/classNames";
+import { PropsWithChildren } from 'react';
+import './index.css';
+import { classNames } from '../../../utils/classNames';
 
 export const Modal = ({
   isOpen,
@@ -10,20 +10,14 @@ export const Modal = ({
 }: PropsWithChildren<{
   isOpen: boolean;
   onClose: () => void;
-  "data-testid"?: string;
+  'data-testid'?: string;
 }>) => {
   return (
     <div>
-      <div
-        className={classNames("modalDimmer", isOpen ? "visible" : "hidden")}
-        onClick={onClose}
-      />
+      <div className={classNames('modalDimmer', isOpen ? 'visible' : 'hidden')} onClick={onClose} />
 
       {isOpen && (
-        <div
-          className={classNames("modalContent", isOpen ? "visible" : "hidden")}
-          {...props}
-        >
+        <div className={classNames('modalContent', isOpen ? 'visible' : 'hidden')} {...props}>
           {children}
         </div>
       )}
