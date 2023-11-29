@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import { type Review } from '../../../entities/review';
-import { serviceContext } from '../../contexts/serviceContext';
-import { useTypedContext } from '../../hooks/useTypedContext';
-import { Button } from '../Button';
-import { Input } from '../Input';
-import { Modal } from '../Modal';
+import { type Review } from '../../../../entities/review';
+import { Button } from '../../../components/Button';
+import { Input } from '../../../components/Input';
+import { Modal } from '../../../components/Modal';
+import { serviceContext } from '../../../contexts/serviceContext';
+import { useTypedContext } from '../../../hooks/useTypedContext';
 import styles from './index.module.css';
 
 type ReviewForm = Omit<Partial<Record<keyof Review, string>>, 'id'>;

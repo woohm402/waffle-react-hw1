@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { createReviewContent, type Review } from '../../../entities/review';
-import { AddReviewModal } from '../../components/AddReviewModal';
+import { AddReviewModal } from './AddReviewModal';
 import { Button } from '../../components/Button';
-import { DeleteReviewModal } from '../../components/DeleteReviewModal';
+import { DeleteReviewModal } from './DeleteReviewModal';
 import { FAB } from '../../components/FAB';
 import { ReviewItem } from '../../components/ReviewItem';
 import { storeContext } from '../../contexts/storeContext';

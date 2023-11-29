@@ -1,6 +1,6 @@
-import { type Review } from '../../../entities/review';
-import { Button } from '../Button';
-import { Modal } from '../Modal';
+import { type Review } from '../../../../entities/review';
+import { Button } from '../../../components/Button';
+import { Modal } from '../../../components/Modal';
 import styles from './index.module.css';
 
 export const DeleteReviewModal = ({
