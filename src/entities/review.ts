@@ -3,7 +3,7 @@ import { type Snack } from './snack';
 
 export type Review = {
   id: Brand<number, 'ReviewId'>;
-  snackId: Snack['id'];
+  snack: Snack;
   rating: Brand<1 | 2 | 3 | 4 | 5, 'ReviewRating'>;
   content: Brand<string, 'ReviewContent'>;
 };

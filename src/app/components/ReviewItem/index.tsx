@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 import { createReviewContent, type Review } from '../../../entities/review';
-import { storeContext } from '../../contexts/storeContext';
+import { serviceContext } from '../../contexts/serviceContext';
+import { useMutation } from '../../hooks/useMutation';
 import { useTypedContext } from '../../hooks/useTypedContext';
 import { DeleteReviewModal } from '../../pages/ReviewsPage/DeleteReviewModal';
 import { ProfileImage } from '../ProfileImage';
@@ -19,16 +20,18 @@ export const ReviewItem = ({
     | { state: 'blocked' };
   showProfile: boolean;
 }) => {
-  const { snacks, updateReview, deleteReview } = useTypedContext(storeContext);
   const [draft, setDraft] = useState<string>();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const { mutate: updateReview } = useUpdateReview(review.id);
+  const { mutate: deleteReview } = useDeleteReview(review.id);
+
   return (
     <div className={styles.reviewItem} data-testid="review">
-      {showProfile && <ProfileImage src={snacks.find((s) => s.id === review.snackId)?.src} />}
+      {showProfile && <ProfileImage src={review.snack.src} />}
       <div>
         <div className={styles.reviewName}>
-          <strong>{snacks.find((s) => s.id === review.snackId)?.title}</strong>
+          <strong>{review.snack.title}</strong>
           <span>/</span>
           <b>*{review.rating.toFixed(1)}</b>
           {state.state === 'idle' ? (
@@ -46,7 +49,7 @@ export const ReviewItem = ({
                 data-testid="edit-review-save"
                 onClick={() => {
                   if (!draft) return;
-                  updateReview(review.id, { content: createReviewContent(draft) });
+                  updateReview({ content: createReviewContent(draft) }, { onSuccess: () => state.onEndEdit() });
                 }}
               >
                 저장
@@ -71,8 +74,22 @@ export const ReviewItem = ({
       <DeleteReviewModal
         reviewItem={isDeleteModalOpen ? review : null}
         onClose={() => setDeleteModalOpen(false)}
-        onDelete={() => deleteReview(review.id)}
+        onDelete={() => deleteReview(undefined, { onSuccess: () => setDeleteModalOpen(false) })}
       />
     </div>
   );
+};
+
+const useUpdateReview = (id: Review['id']) => {
+  const { reviewService } = useTypedContext(serviceContext);
+  return useMutation({
+    mutationFn: (req: { content: Review['content'] }) => reviewService.updateReview(id, req),
+  });
+};
+
+const useDeleteReview = (id: Review['id']) => {
+  const { reviewService } = useTypedContext(serviceContext);
+  return useMutation({
+    mutationFn: () => reviewService.deleteReview(id),
+  });
 };

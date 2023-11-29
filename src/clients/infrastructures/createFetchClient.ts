@@ -1,4 +1,4 @@
-import { type ApiClient, type Config, type Url } from '../clients/ApiClient';
+import { type ApiClient, type Config, type Url } from '../ApiClient';
 
 const paramsToString = (params?: URLSearchParams) => (params ? `?${params}` : '');
 
@@ -40,10 +40,10 @@ export const createFetchClient = (options: Partial<CreateClientOptions> = {}): A
       }
     },
 
-    async put<D = unknown, B = unknown>(url: Url, body?: B, config?: Partial<Config>) {
+    async patch<D = unknown, B = unknown>(url: Url, body?: B, config?: Partial<Config>) {
       const fetchUrl = `${baseURL}${url}${paramsToString(config?.params)}`;
       const fetchHeaders = { 'content-type': 'application/json;charset=UTF-8', ...headers, ...config?.headers };
-      const response = await fetch(fetchUrl, { headers: fetchHeaders, method: 'PUT', body: JSON.stringify(body) });
+      const response = await fetch(fetchUrl, { headers: fetchHeaders, method: 'PATCH', body: JSON.stringify(body) });
       const responseBody = await response.json().catch(() => null);
 
       if (response.ok) {

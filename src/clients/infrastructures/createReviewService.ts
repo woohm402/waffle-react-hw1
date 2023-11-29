@@ -1,12 +1,19 @@
-import { createReviewContent, createReviewRating, type Review } from '../entities/review';
-import { type ReviewService } from '../usecases/ReviewService';
+import { createReviewContent, createReviewRating, type Review } from '../../entities/review';
+import { type Snack } from '../../entities/snack';
+import { type ReviewRepository } from '../../repositories/ReviewRepository';
+import { type ReviewService } from '../../usecases/ReviewService';
 
-export const createReviewService = (): ReviewService => {
+export const createReviewService = ({ reviewRepository }: { reviewRepository: ReviewRepository }): ReviewService => {
   return {
+    listReviews: async (req) => reviewRepository.listReviews(req),
+    createReview: async (req) => reviewRepository.createReview(req),
+    updateReview: async (reviewId, review) => reviewRepository.updateReview(reviewId, review),
+    deleteReview: async (reviewId) => reviewRepository.deleteReview(reviewId),
+
     validateReview: (reviewForm, snacks) => {
       type Invalid = { message: string; valid: false };
 
-      const snackTitleResult = ((): { valid: true; snackId: Review['snackId'] } | Invalid => {
+      const snackTitleResult = ((): { valid: true; snackId: Snack['id'] } | Invalid => {
         try {
           const snack = snacks.find((s) => s.title === reviewForm.snackTitle);
           if (!snack) throw new Error();
