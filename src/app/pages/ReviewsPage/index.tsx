@@ -8,7 +8,7 @@ import { storeContext } from '../../contexts/storeContext';
 import { useTypedContext } from '../../hooks/useTypedContext';
 import styles from './index.module.css';
 
-export const ReviewPage = () => {
+export const ReviewsPage = () => {
   const { reviews, updateReview, createReview, deleteReview } = useTypedContext(storeContext);
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [reviewState, setReviewState] = useState<
