@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { createReviewId, type Review } from '../entities/review';
-import { type Snack } from '../entities/snack';
+import { createSnackId, type Snack } from '../entities/snack';
 import { Layout } from './components/Layout';
 import { storeContext } from './contexts/storeContext';
 import { ReviewsPage } from './pages/ReviewsPage';
@@ -14,7 +14,7 @@ import { SnackViewPage } from './pages/SnackViewPage';
 
 export const App = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [snacks] = useState<Snack[]>([]);
+  const [snacks, setSnacks] = useState<Snack[]>([]);
 
   const router = createBrowserRouter([
     {
@@ -34,20 +34,25 @@ export const App = () => {
     <storeContext.Provider
       value={{
         reviews,
-        snacks,
+        createReview: useCallback(
+          (data: Omit<Review, 'id'>) => setReviews((reviews) => [{ ...data, id: createReviewId() }, ...reviews]),
+          [],
+        ),
         updateReview: useCallback(
           (id: Review['id'], data: Partial<Omit<Review, 'id'>>) =>
             setReviews((reviews) => reviews.map((r) => (r.id === id ? { ...r, ...data } : r))),
-          [],
-        ),
-        createReview: useCallback(
-          (data: Omit<Review, 'id'>) => setReviews((reviews) => [{ ...data, id: createReviewId() }, ...reviews]),
           [],
         ),
         deleteReview: useCallback(
           (id: Review['id']) => setReviews((reviews) => reviews.filter((r) => r.id !== id)),
           [],
         ),
+        snacks,
+        createSnack: useCallback((data: Omit<Snack, 'id'>) => {
+          const newSnack = { ...data, id: createSnackId() };
+          setSnacks((snacks) => [newSnack, ...snacks]);
+          return newSnack;
+        }, []),
       }}
     >
       <RouterProvider router={router} />

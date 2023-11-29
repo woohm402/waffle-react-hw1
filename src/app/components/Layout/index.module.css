@@ -29,3 +29,9 @@
 .menuItem.active {
   font-weight: 700;
 }
+
+.main {
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 40px 0;
+}

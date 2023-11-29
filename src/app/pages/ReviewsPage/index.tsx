@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 import { createReviewContent, type Review } from '../../../entities/review';
 import { AddReviewModal } from '../../components/AddReviewModal';
@@ -16,6 +17,7 @@ export const ReviewsPage = () => {
   const [reviewState, setReviewState] = useState<
     { state: 'idle' } | { state: 'edit'; id: Review['id']; draft: string } | { state: 'delete'; id: Review['id'] }
   >({ state: 'idle' });
+  const navigate = useNavigate();
 
   return (
     <>
@@ -72,7 +74,9 @@ export const ReviewsPage = () => {
           <Button variant="secondary" onClick={() => setAddModalOpen(true)}>
             새 리뷰
           </Button>
-          <Button variant="secondary">새 과자</Button>
+          <Button variant="secondary" onClick={() => navigate('/snacks/new')}>
+            새 과자
+          </Button>
         </div>
       </FAB>
 
