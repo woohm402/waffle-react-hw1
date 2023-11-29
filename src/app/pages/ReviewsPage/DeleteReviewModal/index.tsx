@@ -1,6 +1,8 @@
 import { type Review } from '../../../../entities/review';
 import { Button } from '../../../components/Button';
 import { Modal } from '../../../components/Modal';
+import { storeContext } from '../../../contexts/storeContext';
+import { useTypedContext } from '../../../hooks/useTypedContext';
 import styles from './index.module.css';
 
 export const DeleteReviewModal = ({
@@ -12,6 +14,8 @@ export const DeleteReviewModal = ({
   onClose: () => void;
   onDelete: () => void;
 }) => {
+  const { snacks } = useTypedContext(storeContext);
+
   return (
     <Modal isOpen={reviewItem !== null} onClose={onClose}>
       <h2>리뷰 삭제</h2>
@@ -19,7 +23,9 @@ export const DeleteReviewModal = ({
         (() => {
           return (
             <>
-              <p className={styles.description}>&quot;{reviewItem.snackName}&quot;에 대한 리뷰를 삭제하시겠습니까?</p>
+              <p className={styles.description}>
+                &quot;{snacks.find((s) => s.id === reviewItem.snackId)?.title}&quot;에 대한 리뷰를 삭제하시겠습니까?
+              </p>
               <div className={styles.actions}>
                 <Button variant="danger" data-testid="delete-review-delete" onClick={onDelete}>
                   삭제
