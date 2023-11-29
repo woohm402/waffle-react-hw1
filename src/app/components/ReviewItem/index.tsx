@@ -1,5 +1,6 @@
-import { Review } from "../../../entities/review";
-import "./index.css";
+import './index.css';
+
+import { Review } from '../../../entities/review';
 
 export const ReviewItem = ({
   review,
@@ -9,15 +10,15 @@ export const ReviewItem = ({
 }: {
   review: Review;
   state:
-    | { state: "idle" }
+    | { state: 'idle' }
     | {
-        state: "editing";
+        state: 'editing';
         draft: string;
         onChange: (e: string) => void;
         onChangeSubmit: () => void;
         onChangeCancel: () => void;
       }
-    | { state: "blocked" };
+    | { state: 'blocked' };
   onEditReview: () => void;
   onDeleteReview: () => void;
 }) => {
@@ -29,7 +30,7 @@ export const ReviewItem = ({
           <strong>{review.snackName}</strong>
           <span>/</span>
           <b>*{review.rating.toFixed(1)}</b>
-          {state.state === "idle" ? (
+          {state.state === 'idle' ? (
             <div className="reviewActions">
               <button data-testid="edit-review" onClick={onEditReview}>
                 수정
@@ -38,24 +39,18 @@ export const ReviewItem = ({
                 삭제
               </button>
             </div>
-          ) : state.state === "editing" ? (
+          ) : state.state === 'editing' ? (
             <div>
-              <button
-                data-testid="edit-review-save"
-                onClick={state.onChangeSubmit}
-              >
+              <button data-testid="edit-review-save" onClick={state.onChangeSubmit}>
                 저장
               </button>
-              <button
-                data-testid="edit-review-cancel"
-                onClick={state.onChangeCancel}
-              >
+              <button data-testid="edit-review-cancel" onClick={state.onChangeCancel}>
                 취소
               </button>
             </div>
           ) : null}
         </div>
-        {state.state === "editing" ? (
+        {state.state === 'editing' ? (
           <textarea
             data-testid="edit-review-content-input"
             className="reviewContent"

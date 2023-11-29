@@ -1,12 +1,12 @@
 import {
-  Review,
   createReviewContent,
   createReviewId,
   createReviewImage,
   createReviewRating,
   createReviewSnackName,
-} from "../entities/review";
-import { ReviewService } from "../usecases/ReviewService";
+  Review,
+} from '../entities/review';
+import { ReviewService } from '../usecases/ReviewService';
 
 export const createReviewService = (): ReviewService => {
   return {
@@ -15,15 +15,15 @@ export const createReviewService = (): ReviewService => {
         | { valid: false; message: string }
         | ({ valid: true } & Record<T, Review[T]>);
 
-      const imageResult = ((): ValidationResult<"image"> => {
+      const imageResult = ((): ValidationResult<'image'> => {
         try {
           return { valid: true, image: createReviewImage(reviewForm.image) };
         } catch (err) {
-          return { valid: false, message: "" } as const;
+          return { valid: false, message: '' } as const;
         }
       })();
 
-      const snackNameResult = ((): ValidationResult<"snackName"> => {
+      const snackNameResult = ((): ValidationResult<'snackName'> => {
         try {
           if (!reviewForm.snackName) throw new Error();
           return {
@@ -33,12 +33,12 @@ export const createReviewService = (): ReviewService => {
         } catch (err) {
           return {
             valid: false,
-            message: "첫글자와 끝글자가 공백이 아닌 1~20자 문자열로 써주세요",
+            message: '첫글자와 끝글자가 공백이 아닌 1~20자 문자열로 써주세요',
           };
         }
       })();
 
-      const contentResult = ((): ValidationResult<"content"> => {
+      const contentResult = ((): ValidationResult<'content'> => {
         try {
           if (!reviewForm.content) throw new Error();
           return {
@@ -48,29 +48,24 @@ export const createReviewService = (): ReviewService => {
         } catch (err) {
           return {
             valid: false,
-            message: "첫글자와 끝글자가 공백이 아닌 5~1000자 문자열로 써주세요",
+            message: '첫글자와 끝글자가 공백이 아닌 5~1000자 문자열로 써주세요',
           };
         }
       })();
 
-      const ratingResult = ((): ValidationResult<"rating"> => {
+      const ratingResult = ((): ValidationResult<'rating'> => {
         try {
           if (!reviewForm.rating) throw new Error();
           return { valid: true, rating: createReviewRating(reviewForm.rating) };
         } catch (err) {
           return {
             valid: false,
-            message: "평점은 1 ~ 5 사이의 숫자로 써주세요",
+            message: '평점은 1 ~ 5 사이의 숫자로 써주세요',
           };
         }
       })();
 
-      if (
-        imageResult.valid &&
-        snackNameResult.valid &&
-        contentResult.valid &&
-        ratingResult.valid
-      ) {
+      if (imageResult.valid && snackNameResult.valid && contentResult.valid && ratingResult.valid) {
         return {
           valid: true,
           review: {
@@ -87,9 +82,7 @@ export const createReviewService = (): ReviewService => {
         valid: false,
         errors: {
           ...(imageResult.valid ? {} : { image: imageResult.message }),
-          ...(snackNameResult.valid
-            ? {}
-            : { snackName: snackNameResult.message }),
+          ...(snackNameResult.valid ? {} : { snackName: snackNameResult.message }),
           ...(contentResult.valid ? {} : { content: contentResult.message }),
           ...(ratingResult.valid ? {} : { rating: ratingResult.message }),
         },

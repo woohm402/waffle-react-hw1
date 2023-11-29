@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Review } from "../../../entities/review";
-import { Modal } from "../Modal";
-import { useServiceContext } from "../../contexts/serviceContext";
+import { useState } from 'react';
 
-type ReviewForm = Omit<Partial<Record<keyof Review, string>>, "id">;
+import { Review } from '../../../entities/review';
+import { useServiceContext } from '../../contexts/serviceContext';
+import { Modal } from '../Modal';
+
+type ReviewForm = Omit<Partial<Record<keyof Review, string>>, 'id'>;
 
 export const AddReviewModal = ({
   isOpen,
@@ -16,9 +17,7 @@ export const AddReviewModal = ({
 }) => {
   const { reviewService } = useServiceContext();
   const [review, setReview] = useState<ReviewForm>({});
-  const [errors, setErrors] = useState<Partial<Record<keyof Review, string>>>(
-    {}
-  );
+  const [errors, setErrors] = useState<Partial<Record<keyof Review, string>>>({});
 
   const handleSubmit = () => {
     const validationResult = reviewService.validateReview(review);
@@ -34,11 +33,7 @@ export const AddReviewModal = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      data-testid="write-review-modal"
-    >
+    <Modal isOpen={isOpen} onClose={handleClose} data-testid="write-review-modal">
       <h2>리뷰 쓰기</h2>
       <form
         onSubmit={(e) => {
@@ -51,7 +46,7 @@ export const AddReviewModal = ({
           이미지
           <input
             data-testid="image-input"
-            value={review.image ?? ""}
+            value={review.image ?? ''}
             onChange={(e) => setReview({ ...review, image: e.target.value })}
           />
           <p>{errors.image}</p>
@@ -60,10 +55,8 @@ export const AddReviewModal = ({
           과자 이름
           <input
             data-testid="name-input"
-            value={review.snackName ?? ""}
-            onChange={(e) =>
-              setReview({ ...review, snackName: e.target.value })
-            }
+            value={review.snackName ?? ''}
+            onChange={(e) => setReview({ ...review, snackName: e.target.value })}
           />
           <p data-testid="name-input-message">{errors.snackName}</p>
         </label>
@@ -72,7 +65,7 @@ export const AddReviewModal = ({
           <input
             data-testid="rating-input"
             type="number"
-            value={review.rating ?? ""}
+            value={review.rating ?? ''}
             onChange={(e) => setReview({ ...review, rating: e.target.value })}
           />
           <p data-testid="rating-input-message">{errors.rating}</p>
@@ -81,18 +74,14 @@ export const AddReviewModal = ({
           내용
           <input
             data-testid="content-input"
-            value={review.content ?? ""}
+            value={review.content ?? ''}
             onChange={(e) => setReview({ ...review, content: e.target.value })}
           />
           <p data-testid="content-input-message">{errors.content}</p>
         </label>
         <div>
           <button data-testid="submit-review">작성</button>
-          <button
-            data-testid="cancel-review"
-            type="button"
-            onClick={handleClose}
-          >
+          <button data-testid="cancel-review" type="button" onClick={handleClose}>
             취소
           </button>
         </div>

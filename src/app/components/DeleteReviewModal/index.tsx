@@ -1,8 +1,7 @@
-import { Review } from "../../../entities/review";
-import { Button } from "../Button";
-import { Modal } from "../Modal";
-
-import styles from "./index.module.css";
+import { Review } from '../../../entities/review';
+import { Button } from '../Button';
+import { Modal } from '../Modal';
+import styles from './index.module.css';
 
 export const DeleteReviewModal = ({
   reviewItem,
@@ -20,22 +19,12 @@ export const DeleteReviewModal = ({
         (() => {
           return (
             <>
-              <p className={styles.description}>
-                "{reviewItem.snackName}"에 대한 리뷰를 삭제하시겠습니까?
-              </p>
+              <p className={styles.description}>&quot;{reviewItem.snackName}&quot;에 대한 리뷰를 삭제하시겠습니까?</p>
               <div className={styles.actions}>
-                <Button
-                  variant="danger"
-                  data-testid="delete-review-delete"
-                  onClick={onDelete}
-                >
+                <Button variant="danger" data-testid="delete-review-delete" onClick={onDelete}>
                   삭제
                 </Button>
-                <Button
-                  variant="third"
-                  data-testid="delete-review-cancel"
-                  onClick={onClose}
-                >
+                <Button variant="third" data-testid="delete-review-cancel" onClick={onClose}>
                   취소
                 </Button>
               </div>
