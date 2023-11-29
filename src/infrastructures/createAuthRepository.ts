@@ -4,7 +4,7 @@ import { type ApiClient } from './../clients/ApiClient';
 export const createAuthRepository = ({ apiClient }: { apiClient: ApiClient }): AuthRepository => {
   return {
     getToken: async () => {
-      const { data } = await apiClient.post<{ access_token: string }>('/users/me');
+      const { data } = await apiClient.post<{ access_token: string }>('/auth/refresh');
       return { token: data.access_token };
     },
     login: async (username, password) => {

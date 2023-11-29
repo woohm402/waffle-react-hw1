@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { type AuthService } from '../../../usecases/AuthService';
 import { Button } from '../../components/Button';
@@ -7,13 +8,14 @@ import styles from './index.module.css';
 
 export const LoginPage = ({
   authService,
-  onLoginSuccess,
+  setToken,
 }: {
   authService: AuthService;
-  onLoginSuccess: (token: string) => void;
+  setToken: (token: string) => void;
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const isValid = username.length > 0 && password.length > 0;
 
@@ -22,7 +24,8 @@ export const LoginPage = ({
 
     try {
       const { token } = await authService.login(username, password);
-      onLoginSuccess(token);
+      setToken(token);
+      navigate('/');
     } catch (e) {
       alert('로그인 실패');
     }
