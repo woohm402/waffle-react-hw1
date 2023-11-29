@@ -1,4 +1,4 @@
-import { Review } from '../entities/review';
+import { type Review } from '../entities/review';
 
 export type ReviewService = {
   validateReview: (reviewForm: Omit<Partial<Record<keyof Review, string>>, 'id'>) =>

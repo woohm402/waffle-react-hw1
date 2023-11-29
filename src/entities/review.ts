@@ -1,4 +1,4 @@
-import { Brand, brand } from '../utils/brand';
+import { type Brand, brand } from '../utils/brand';
 
 export type Review = {
   id: Brand<number, 'ReviewId'>;

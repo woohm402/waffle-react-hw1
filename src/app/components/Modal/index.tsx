@@ -1,6 +1,6 @@
 import './index.css';
 
-import { PropsWithChildren } from 'react';
+import { type PropsWithChildren } from 'react';
 
 import { classNames } from '../../../utils/classNames';
 

@@ -4,9 +4,9 @@ import {
   createReviewImage,
   createReviewRating,
   createReviewSnackName,
-  Review,
+  type Review,
 } from '../entities/review';
-import { ReviewService } from '../usecases/ReviewService';
+import { type ReviewService } from '../usecases/ReviewService';
 
 export const createReviewService = (): ReviewService => {
   return {

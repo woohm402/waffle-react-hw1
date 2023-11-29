@@ -15,6 +15,7 @@ module.exports = {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'react/react-in-jsx-scope': 'off',
     'simple-import-sort/imports': 'error',
+    '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
   },
   settings: { react: { version: 'detect' } },
 };
