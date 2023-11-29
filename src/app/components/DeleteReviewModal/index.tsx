@@ -1,7 +1,6 @@
 import { Review } from '../../../entities/review';
 import { Button } from '../Button';
 import { Modal } from '../Modal';
-
 import styles from './index.module.css';
 
 export const DeleteReviewModal = ({

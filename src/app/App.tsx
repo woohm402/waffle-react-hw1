@@ -1,18 +1,20 @@
+import './reset.css';
+import './App.css';
+
+import { useState } from 'react';
+
+import data from '../data.json';
 import {
-  Review,
   createReviewContent,
   createReviewId,
   createReviewImage,
   createReviewRating,
   createReviewSnackName,
+  Review,
 } from '../entities/review';
-import data from '../data.json';
-import { useState } from 'react';
-import { ReviewItem } from './components/ReviewItem';
-import './reset.css';
-import './App.css';
 import { AddReviewModal } from './components/AddReviewModal';
 import { DeleteReviewModal } from './components/DeleteReviewModal';
+import { ReviewItem } from './components/ReviewItem';
 
 const initialData = data.map(({ content, id, image, rating, snack_name }): Review => {
   return {

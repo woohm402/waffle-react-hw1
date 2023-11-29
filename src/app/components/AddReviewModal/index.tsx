@@ -1,7 +1,8 @@
 import { useState } from 'react';
+
 import { Review } from '../../../entities/review';
-import { Modal } from '../Modal';
 import { useServiceContext } from '../../contexts/serviceContext';
+import { Modal } from '../Modal';
 
 type ReviewForm = Omit<Partial<Record<keyof Review, string>>, 'id'>;
 

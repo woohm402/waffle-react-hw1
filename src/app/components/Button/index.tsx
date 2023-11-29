@@ -2,7 +2,6 @@ import { ButtonHTMLAttributes } from 'react';
 
 import { classNames } from '../../../utils/classNames';
 import styles from './index.module.css';
-
 import variantStyles from './variant.module.css';
 
 export const Button = ({

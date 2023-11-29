@@ -1,5 +1,7 @@
-import { PropsWithChildren } from 'react';
 import './index.css';
+
+import { PropsWithChildren } from 'react';
+
 import { classNames } from '../../../utils/classNames';
 
 export const Modal = ({

@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import { App } from './app/App.tsx';
-import { createReviewService } from './infrastructures/createReviewService.ts';
 import { serviceContext } from './app/contexts/serviceContext.ts';
+import { createReviewService } from './infrastructures/createReviewService.ts';
 
 const reviewService = createReviewService();
 
