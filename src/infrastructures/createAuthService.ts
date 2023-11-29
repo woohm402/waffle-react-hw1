@@ -1,5 +1,5 @@
-import { type AuthRepository } from '../../repositories/AuthRepository';
-import { type AuthService } from '../../usecases/AuthService';
+import { type AuthRepository } from '../repositories/AuthRepository';
+import { type AuthService } from '../usecases/AuthService';
 
 export const createAuthService = ({ authRepository }: { authRepository: AuthRepository }): AuthService => {
   return {

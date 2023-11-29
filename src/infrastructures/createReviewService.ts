@@ -1,7 +1,7 @@
-import { createReviewContent, createReviewRating, type Review } from '../../entities/review';
-import { type Snack } from '../../entities/snack';
-import { type ReviewRepository } from '../../repositories/ReviewRepository';
-import { type ReviewService } from '../../usecases/ReviewService';
+import { createReviewContent, createReviewRating, type Review } from '../entities/review';
+import { type Snack } from '../entities/snack';
+import { type ReviewRepository } from '../repositories/ReviewRepository';
+import { type ReviewService } from '../usecases/ReviewService';
 
 export const createReviewService = ({ reviewRepository }: { reviewRepository: ReviewRepository }): ReviewService => {
   return {

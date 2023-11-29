@@ -1,4 +1,4 @@
-import { type ApiClient, type Config, type Url } from '../ApiClient';
+import { type ApiClient, type Config, type Url } from '../clients/ApiClient';
 
 const paramsToString = (params?: URLSearchParams) => (params ? `?${params}` : '');
 

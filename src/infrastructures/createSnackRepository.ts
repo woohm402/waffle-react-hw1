@@ -1,7 +1,7 @@
-import { createSnackId, createSnackSrc } from '../../entities/snack';
-import { createSnackTitle } from '../../entities/snack';
-import { type SnackRepository } from '../../repositories/SnackRepository';
-import { type ApiClient } from '../ApiClient';
+import { type ApiClient } from '../clients/ApiClient';
+import { createSnackId, createSnackSrc } from '../entities/snack';
+import { createSnackTitle } from '../entities/snack';
+import { type SnackRepository } from '../repositories/SnackRepository';
 
 export const createSnackRepository = ({ apiClient }: { apiClient: ApiClient }): SnackRepository => {
   return {

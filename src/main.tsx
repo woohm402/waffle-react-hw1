@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { App } from './app/App.tsx';
-import { createAuthRepository } from './clients/infrastructures/createAuthRepository.ts';
-import { createAuthService } from './clients/infrastructures/createAuthService.ts';
-import { createFetchClient } from './clients/infrastructures/createFetchClient.ts';
+import { createAuthRepository } from './infrastructures/createAuthRepository.ts';
+import { createAuthService } from './infrastructures/createAuthService.ts';
+import { createFetchClient } from './infrastructures/createFetchClient.ts';
 
 const baseURL = 'https://seminar-react-api.wafflestudio.com';
 
