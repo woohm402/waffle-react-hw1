@@ -26,12 +26,15 @@
   margin-bottom: 20px;
 }
 
-.addModalButton {
+.fab {
   position: fixed;
-  width: 40px;
-  height: 40px;
   bottom: 40px;
   right: 40px;
+}
+
+.addModalButton {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: none;
   background-color: chartreuse;
@@ -39,4 +42,10 @@
   font-size: 30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   cursor: pointer;
+}
+
+.fabContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

@@ -2,7 +2,9 @@ import { useState } from 'react';
 
 import { createReviewContent, type Review } from '../../../entities/review';
 import { AddReviewModal } from '../../components/AddReviewModal';
+import { Button } from '../../components/Button';
 import { DeleteReviewModal } from '../../components/DeleteReviewModal';
+import { FAB } from '../../components/FAB';
 import { ReviewItem } from '../../components/ReviewItem';
 import { storeContext } from '../../contexts/storeContext';
 import { useTypedContext } from '../../hooks/useTypedContext';
@@ -53,9 +55,27 @@ export const ReviewsPage = () => {
           </li>
         ))}
       </ul>
-      <button data-testid="write-review" className={styles.addModalButton} onClick={() => setAddModalOpen(true)}>
-        +
-      </button>
+      <FAB
+        className={styles.fab}
+        trigger={
+          <button data-testid="write-review" className={styles.addModalButton}>
+            +
+          </button>
+        }
+        openedTrigger={
+          <button data-testid="write-review" className={styles.addModalButton}>
+            X
+          </button>
+        }
+      >
+        <div className={styles.fabContent}>
+          <Button variant="secondary" onClick={() => setAddModalOpen(true)}>
+            새 리뷰
+          </Button>
+          <Button variant="secondary">새 과자</Button>
+        </div>
+      </FAB>
+
       <AddReviewModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} onAddReview={createReview} />
       <DeleteReviewModal
         reviewItem={reviewState.state === 'delete' ? reviews.find((r) => r.id === reviewState.id) ?? null : null}
