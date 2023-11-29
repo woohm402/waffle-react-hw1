@@ -1,5 +1,5 @@
-import { type SnackRepository } from '../../repositories/SnackRepository';
-import { type SnackService } from '../../usecases/SnackService';
+import { type SnackRepository } from '../repositories/SnackRepository';
+import { type SnackService } from '../usecases/SnackService';
 
 export const createSnackService = ({ snackRepository }: { snackRepository: SnackRepository }): SnackService => {
   return {

@@ -1,7 +1,7 @@
-import { createReviewContent, createReviewId, createReviewRating } from '../../entities/review';
-import { createSnackId, createSnackSrc, createSnackTitle } from '../../entities/snack';
-import { type ReviewRepository } from '../../repositories/ReviewRepository';
-import { type ApiClient } from '../ApiClient';
+import { type ApiClient } from '../clients/ApiClient';
+import { createReviewContent, createReviewId, createReviewRating } from '../entities/review';
+import { createSnackId, createSnackSrc, createSnackTitle } from '../entities/snack';
+import { type ReviewRepository } from '../repositories/ReviewRepository';
 
 export const createReviewRepository = ({ apiClient }: { apiClient: ApiClient }): ReviewRepository => {
   return {
@@ -57,7 +57,7 @@ export const createReviewRepository = ({ apiClient }: { apiClient: ApiClient }):
           updated_at: string;
           author: { id: number; username: string; created_at: string; updated_at: string };
         };
-      }>('/reviews', review);
+      }>('/reviews', { content: review.content, rating: review.rating, snack: review.snackId });
 
       return {
         id: createReviewId(data.id),
