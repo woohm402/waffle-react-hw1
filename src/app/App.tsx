@@ -1,6 +1,7 @@
 import './reset.css';
 
 import { useCallback, useState } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { createReviewId, type Review } from '../entities/review';
 import { type Snack } from '../entities/snack';
@@ -11,6 +12,11 @@ import { ReviewPage } from './pages/ReviewPage';
 export const App = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [snacks] = useState<Snack[]>([]);
+
+  const router = createBrowserRouter([
+    { path: '/', element: <ReviewPage /> },
+    { path: '*', element: <div>404</div> },
+  ]);
 
   return (
     <storeContext.Provider
@@ -33,7 +39,7 @@ export const App = () => {
       }}
     >
       <Layout>
-        <ReviewPage />
+        <RouterProvider router={router} />
       </Layout>
     </storeContext.Provider>
   );
