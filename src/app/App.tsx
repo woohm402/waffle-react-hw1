@@ -1,6 +1,6 @@
 import './reset.css';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { createReviewId, type Review } from '../entities/review';
@@ -18,12 +18,10 @@ import { SnackCreatePage } from './pages/SnackCreatePage';
 import { SnacksPage } from './pages/SnacksPage';
 import { SnackViewPage } from './pages/SnackViewPage';
 
-const baseURL = 'https://seminar-react-api.wafflestudio.com';
-
-export const App = () => {
+export const App = ({ initialToken, baseURL }: { initialToken: string | null; baseURL: string }) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [snacks, setSnacks] = useState<Snack[]>([]);
-  const [token, setToken] = useState<string | null>();
+  const [token, setToken] = useState<string | null>(initialToken);
 
   const createReview = useCallback(
     (data: Omit<Review, 'id'>) => setReviews((reviews) => [{ ...data, id: createReviewId() }, ...reviews]),
@@ -44,46 +42,40 @@ export const App = () => {
     return newSnack;
   }, []);
 
-  const authService = useMemo(() => {
-    const apiClient = createFetchClient({ baseURL });
+  const services = useMemo(() => {
+    const apiClient = createFetchClient({
+      baseURL,
+      headers: token === null ? undefined : { authorization: `Bearer ${token}` },
+    });
     const authRepository = createAuthRepository({ apiClient });
-    return createAuthService({ authRepository });
-  }, []);
+    const authService = createAuthService({ authRepository });
+    const reviewService = createReviewService();
+    return { reviewService, authService };
+  }, [baseURL, token]);
 
-  useEffect(() => {
-    if (token) return;
-
-    authService
-      .getToken()
-      .then(({ token }) => setToken(token))
-      .catch(() => setToken(null));
-  }, [authService, token]);
-
-  if (token === undefined) return <div>loading...</div>;
-
-  if (token === null) return <LoginPage authService={authService} onLoginSuccess={(token) => setToken(token)} />;
-
-  const reviewService = createReviewService();
+  const router = createBrowserRouter(
+    token === null
+      ? [{ path: '*', element: <LoginPage authService={services.authService} setToken={setToken} /> }]
+      : [
+          {
+            path: '/',
+            element: <Layout />,
+            children: [
+              { path: '/', element: <ReviewsPage /> },
+              { path: '/snacks', element: <SnacksPage /> },
+              { path: '/snacks/new', element: <SnackCreatePage /> },
+              { path: '/snacks/:snackId', element: <SnackViewPage /> },
+            ],
+          },
+          { path: '*', element: <div>404</div> },
+        ],
+  );
 
   return (
-    <serviceContext.Provider value={{ reviewService }}>
+    <serviceContext.Provider value={services}>
       <storeContext.Provider value={{ reviews, createReview, updateReview, deleteReview, snacks, createSnack }}>
         <RouterProvider router={router} />
       </storeContext.Provider>
     </serviceContext.Provider>
   );
 };
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Layout />,
-    children: [
-      { path: '/', element: <ReviewsPage /> },
-      { path: '/snacks', element: <SnacksPage /> },
-      { path: '/snacks/new', element: <SnackCreatePage /> },
-      { path: '/snacks/:snackId', element: <SnackViewPage /> },
-    ],
-  },
-  { path: '*', element: <div>404</div> },
-]);
