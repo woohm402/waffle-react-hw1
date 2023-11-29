@@ -1,8 +1,11 @@
 import { useState } from 'react';
 
-import { Review } from '../../../entities/review';
+import { type Review } from '../../../entities/review';
 import { useServiceContext } from '../../contexts/serviceContext';
+import { Button } from '../Button';
+import { Input } from '../Input';
 import { Modal } from '../Modal';
+import styles from './index.module.css';
 
 type ReviewForm = Omit<Partial<Record<keyof Review, string>>, 'id'>;
 
@@ -36,54 +39,51 @@ export const AddReviewModal = ({
     <Modal isOpen={isOpen} onClose={handleClose} data-testid="write-review-modal">
       <h2>리뷰 쓰기</h2>
       <form
+        className={styles.form}
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
         }}
       >
         <div>{review.image && <img src={review.image} />}</div>
-        <label>
-          이미지
-          <input
-            data-testid="image-input"
-            value={review.image ?? ''}
-            onChange={(e) => setReview({ ...review, image: e.target.value })}
-          />
-          <p>{errors.image}</p>
-        </label>
-        <label>
-          과자 이름
-          <input
-            data-testid="name-input"
-            value={review.snackName ?? ''}
-            onChange={(e) => setReview({ ...review, snackName: e.target.value })}
-          />
-          <p data-testid="name-input-message">{errors.snackName}</p>
-        </label>
-        <label>
-          평점
-          <input
-            data-testid="rating-input"
-            type="number"
-            value={review.rating ?? ''}
-            onChange={(e) => setReview({ ...review, rating: e.target.value })}
-          />
-          <p data-testid="rating-input-message">{errors.rating}</p>
-        </label>
-        <label>
-          내용
-          <input
-            data-testid="content-input"
-            value={review.content ?? ''}
-            onChange={(e) => setReview({ ...review, content: e.target.value })}
-          />
-          <p data-testid="content-input-message">{errors.content}</p>
-        </label>
-        <div>
-          <button data-testid="submit-review">작성</button>
-          <button data-testid="cancel-review" type="button" onClick={handleClose}>
+        <Input
+          label="이미지"
+          data-testid="image-input"
+          value={review.image ?? ''}
+          onChange={(e) => setReview({ ...review, image: e.target.value })}
+          errorMessage={errors.image}
+        />
+        <Input
+          label="과자 이름"
+          data-testid="name-input"
+          value={review.snackName ?? ''}
+          onChange={(e) => setReview({ ...review, snackName: e.target.value })}
+          errorMessage={errors.snackName}
+        />
+        <Input
+          label="평점"
+          data-testid="rating-input"
+          type="number"
+          value={review.rating ?? ''}
+          onChange={(e) => setReview({ ...review, rating: e.target.value })}
+          errorMessage={errors.rating}
+        />
+
+        <Input
+          label="내용"
+          data-testid="content-input"
+          value={review.content ?? ''}
+          onChange={(e) => setReview({ ...review, content: e.target.value })}
+          errorMessage={errors.content}
+        />
+
+        <div className={styles.actions}>
+          <Button variant="primary" data-testid="submit-review">
+            작성
+          </Button>
+          <Button variant="third" data-testid="cancel-review" type="button" onClick={handleClose}>
             취소
-          </button>
+          </Button>
         </div>
       </form>
     </Modal>

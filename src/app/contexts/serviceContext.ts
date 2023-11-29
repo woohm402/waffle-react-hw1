@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { ReviewService } from '../../usecases/ReviewService';
+import { type ReviewService } from '../../usecases/ReviewService';
 
 export type ServiceContext = {
   reviewService: ReviewService;

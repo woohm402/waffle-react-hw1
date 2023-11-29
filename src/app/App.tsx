@@ -10,7 +10,7 @@ import {
   createReviewImage,
   createReviewRating,
   createReviewSnackName,
-  Review,
+  type Review,
 } from '../entities/review';
 import { AddReviewModal } from './components/AddReviewModal';
 import { DeleteReviewModal } from './components/DeleteReviewModal';

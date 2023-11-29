@@ -1,6 +1,6 @@
 import './index.css';
 
-import { Review } from '../../../entities/review';
+import { type Review } from '../../../entities/review';
 
 export const ReviewItem = ({
   review,
