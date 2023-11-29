@@ -1,0 +1,10 @@
+.description {
+  margin-top: 20px;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}

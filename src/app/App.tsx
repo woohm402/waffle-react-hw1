@@ -12,7 +12,7 @@ import { ReviewItem } from "./components/ReviewItem";
 import "./reset.css";
 import "./App.css";
 import { AddReviewModal } from "./components/AddReviewModal";
-import { Modal } from "./components/Modal";
+import { DeleteReviewModal } from "./components/DeleteReviewModal";
 
 const initialData = data.map(
   ({ content, id, image, rating, snack_name }): Review => {
@@ -41,7 +41,7 @@ export const App = () => {
         <a href="https://wafflestudio.com">
           <img
             className="logo"
-            src="https://wafflestudio.com/images/icon_intro.svg"
+            src="https://www.wafflestudio.com/static/images/logo/waffle_logo_title.png"
             data-testid="waffle-logo"
             alt="와플스튜디오"
           />
@@ -111,41 +111,20 @@ export const App = () => {
         onClose={() => setAddModalOpen(false)}
         onAddReview={(newReview) => setReviews([newReview, ...reviews])}
       />
-      <Modal
-        isOpen={reviewState.state === "delete"}
+      <DeleteReviewModal
+        reviewItem={
+          reviewState.state === "delete"
+            ? reviews.find((r) => r.id === reviewState.id) ?? null
+            : null
+        }
         onClose={() => setReviewState({ state: "idle" })}
-      >
-        <h2>리뷰 삭제</h2>
-        {reviewState.state === "delete" &&
-          (() => {
-            const deleting = reviews.find((r) => r.id === reviewState.id);
+        onDelete={() => {
+          if (reviewState.state !== "delete") return;
 
-            if (!deleting) return; // cannot reach here
-
-            return (
-              <>
-                <p>"{deleting.snackName}"에 대한 리뷰를 삭제하시겠습니까?</p>
-                <div>
-                  <button
-                    data-testid="delete-review-delete"
-                    onClick={() => {
-                      setReviewState({ state: "idle" });
-                      setReviews(reviews.filter((r) => r.id !== deleting.id));
-                    }}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    data-testid="delete-review-cancel"
-                    onClick={() => setReviewState({ state: "idle" })}
-                  >
-                    취소
-                  </button>
-                </div>
-              </>
-            );
-          })()}
-      </Modal>
+          setReviews(reviews.filter((r) => r.id !== reviewState.id));
+          setReviewState({ state: "idle" });
+        }}
+      />
     </div>
   );
 };

@@ -1,0 +1,21 @@
+.primary {
+  background-color: rgb(185, 120, 0);
+}
+
+.secondary {
+  background-color: #333333;
+}
+
+.third {
+  background-color: #d9d7cb;
+}
+
+.outline {
+  background-color: transparent;
+  border: 1px solid #333333;
+}
+
+.danger {
+  background-color: #ff2b40;
+  color: #ffffff;
+}
