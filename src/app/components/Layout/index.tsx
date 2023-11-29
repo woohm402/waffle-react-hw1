@@ -36,7 +36,7 @@ export const Layout = () => {
           </Link>
         ))}
       </header>
-      <main>
+      <main className={styles.main}>
         <Outlet />
       </main>
     </div>
