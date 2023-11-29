@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 import { type Review } from '../../../entities/review';
-import { useServiceContext } from '../../contexts/serviceContext';
+import { serviceContext } from '../../contexts/serviceContext';
+import { useTypedContext } from '../../hooks/useTypedContext';
 import { Button } from '../Button';
 import { Input } from '../Input';
 import { Modal } from '../Modal';
@@ -18,7 +19,7 @@ export const AddReviewModal = ({
   onClose: () => void;
   onAddReview: (review: Review) => void;
 }) => {
-  const { reviewService } = useServiceContext();
+  const { reviewService } = useTypedContext(serviceContext);
   const [review, setReview] = useState<ReviewForm>({});
   const [errors, setErrors] = useState<Partial<Record<keyof Review, string>>>({});
 
