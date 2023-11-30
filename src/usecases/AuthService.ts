@@ -1,4 +1,8 @@
+import { type AccessToken } from '../entities/auth';
+import { type User } from '../entities/user';
+
 export type AuthService = {
-  getToken: () => Promise<{ token: string }>;
-  login: (username: string, password: string) => Promise<{ token: string }>;
+  getToken: () => Promise<{ token: AccessToken }>;
+  getMyInfo: () => Promise<User>;
+  login: (username: string, password: string) => Promise<{ token: AccessToken }>;
 };

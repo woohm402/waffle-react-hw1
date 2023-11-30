@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { createReviewContent, type Review } from '../../../entities/review';
+import { authContext } from '../../contexts/authContext';
 import { serviceContext } from '../../contexts/serviceContext';
 import { useMutation } from '../../hooks/useMutation';
 import { useTypedContext } from '../../hooks/useTypedContext';
@@ -23,6 +24,7 @@ export const ReviewItem = ({
 }) => {
   const [draft, setDraft] = useState<string>();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const { myInfo } = useTypedContext(authContext);
 
   const { mutate: updateReview } = useUpdateReview(review.id);
   const { mutate: deleteReview } = useDeleteReview(review.id);
@@ -36,14 +38,16 @@ export const ReviewItem = ({
           <span>/</span>
           <b>*{review.rating.toFixed(1)}</b>
           {state.state === 'idle' ? (
-            <div>
-              <Button variant="primary" data-testid="edit-review" onClick={state.onStartEdit}>
-                수정
-              </Button>
-              <Button variant="danger" data-testid="delete-review" onClick={() => setDeleteModalOpen(true)}>
-                삭제
-              </Button>
-            </div>
+            review.authorId === myInfo.id && (
+              <div>
+                <Button variant="primary" data-testid="edit-review" onClick={state.onStartEdit}>
+                  수정
+                </Button>
+                <Button variant="danger" data-testid="delete-review" onClick={() => setDeleteModalOpen(true)}>
+                  삭제
+                </Button>
+              </div>
+            )
           ) : state.state === 'editing' ? (
             <div>
               <Button
