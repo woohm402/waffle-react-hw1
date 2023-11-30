@@ -16,6 +16,7 @@ import { authContext } from './contexts/authContext';
 import { serviceContext } from './contexts/serviceContext';
 import { useQuery } from './hooks/useQuery';
 import { LoginPage } from './pages/LoginPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { ReviewsPage } from './pages/ReviewsPage';
 import { SnackCreatePage } from './pages/SnackCreatePage';
 import { SnacksPage } from './pages/SnacksPage';
@@ -74,9 +75,9 @@ export const App = ({ initialToken, baseURL }: { initialToken: string | null; ba
                 { path: '/snacks', element: <SnacksPage /> },
                 { path: '/snacks/new', element: <SnackCreatePage /> },
                 { path: '/snacks/:snackId', element: <SnackViewPage /> },
+                { path: '*', element: <NotFoundPage /> },
               ],
             },
-            { path: '*', element: <div>404</div> },
           ])}
         />
       </authContext.Provider>

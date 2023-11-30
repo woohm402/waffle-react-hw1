@@ -16,7 +16,7 @@ export class ErrorBoundary extends Component<Props, { hasError: boolean }> {
   render() {
     if (this.state.hasError) {
       // 폴백 UI를 커스텀하여 렌더링할 수 있습니다.
-      return <h1>Something went wrong.</h1>;
+      return this.props.fallback;
     }
 
     return this.props.children;

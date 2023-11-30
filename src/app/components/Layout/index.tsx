@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { classNames } from '../../../utils/classNames';
+import { ErrorPage } from '../../pages/ErrorPage';
 import { ErrorBoundary } from '../ErrorBoundary';
 import styles from './index.module.css';
 
@@ -38,7 +39,7 @@ export const Layout = () => {
         ))}
       </header>
       <main className={styles.main}>
-        <ErrorBoundary fallback={<div>오류가 발생했습니다.</div>}>
+        <ErrorBoundary fallback={<ErrorPage />}>
           <Outlet />
         </ErrorBoundary>
       </main>
