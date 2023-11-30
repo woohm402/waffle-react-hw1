@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
 
-export const useQuery = <T = unknown>({ queryFn }: { queryFn: () => Promise<T> }) => {
+export const useQuery = <T = unknown>({
+  queryFn,
+}: {
+  queryFn: () => Promise<T>;
+}): { data: T; status: 'success' } | { data: undefined; status: 'pending' } => {
   const [data, setData] = useState<T>();
-  const [, setStatus] = useState<'fetching' | 'error' | 'success' | 'idle'>('idle');
+  const [error, setError] = useState<unknown>();
 
   useEffect(() => {
     let cancelled = false;
 
     const fetchData = async () => {
       try {
-        setStatus('fetching');
         const data = await queryFn();
         if (!cancelled) setData(data);
-        setStatus('success');
       } catch (err) {
-        setStatus('error');
+        setError(err);
       }
     };
 
@@ -25,5 +27,9 @@ export const useQuery = <T = unknown>({ queryFn }: { queryFn: () => Promise<T> }
     };
   }, [queryFn]);
 
-  return { data };
+  if (error) throw error;
+
+  if (!data) return { data: undefined, status: 'pending' };
+
+  return { data, status: 'success' };
 };
