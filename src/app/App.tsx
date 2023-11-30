@@ -43,7 +43,14 @@ export const App = ({ initialToken, baseURL }: { initialToken: string | null; ba
     enabled: token !== null,
   });
 
-  if (token === null) return <LoginPage authService={services.authService} setToken={setToken} />;
+  if (token === null)
+    return (
+      <RouterProvider
+        router={createBrowserRouter([
+          { path: '*', element: <LoginPage authService={services.authService} setToken={setToken} /> },
+        ])}
+      />
+    );
 
   if (myInfo === undefined)
     return (
