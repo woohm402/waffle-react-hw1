@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { App } from './app/App.tsx';
-import { Loader } from './app/components/Loader/index.tsx';
+import { CenterLoader } from './app/components/CenterLoader/index.tsx';
 import { createAuthRepository } from './infrastructures/createAuthRepository.ts';
 import { createAuthService } from './infrastructures/createAuthService.ts';
 import { createFetchClient } from './infrastructures/createFetchClient.ts';
@@ -14,9 +14,7 @@ const initApp = async () => {
   if (!rootNode) throw new Error();
 
   const loaderReactRoot = ReactDOM.createRoot(rootNode);
-  loaderReactRoot.render(
-    <Loader style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />,
-  );
+  loaderReactRoot.render(<CenterLoader />);
 
   const apiClient = createFetchClient({ baseURL });
   const authRepository = createAuthRepository({ apiClient });

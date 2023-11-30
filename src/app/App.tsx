@@ -1,6 +1,6 @@
 import './reset.css';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { createAuthRepository } from '../infrastructures/createAuthRepository';
@@ -10,8 +10,11 @@ import { createReviewRepository } from '../infrastructures/createReviewRepositor
 import { createReviewService } from '../infrastructures/createReviewService';
 import { createSnackRepository } from '../infrastructures/createSnackRepository';
 import { createSnackService } from '../infrastructures/createSnackService';
+import { CenterLoader } from './components/CenterLoader';
 import { Layout } from './components/Layout';
+import { authContext } from './contexts/authContext';
 import { serviceContext } from './contexts/serviceContext';
+import { useQuery } from './hooks/useQuery';
 import { LoginPage } from './pages/LoginPage';
 import { ReviewsPage } from './pages/ReviewsPage';
 import { SnackCreatePage } from './pages/SnackCreatePage';
@@ -35,27 +38,41 @@ export const App = ({ initialToken, baseURL }: { initialToken: string | null; ba
     return { reviewService, authService, snackService };
   }, [baseURL, token]);
 
-  const router = createBrowserRouter(
-    token === null
-      ? [{ path: '*', element: <LoginPage authService={services.authService} setToken={setToken} /> }]
-      : [
-          {
-            path: '/',
-            element: <Layout />,
-            children: [
-              { path: '/', element: <ReviewsPage /> },
-              { path: '/snacks', element: <SnacksPage /> },
-              { path: '/snacks/new', element: <SnackCreatePage /> },
-              { path: '/snacks/:snackId', element: <SnackViewPage /> },
-            ],
-          },
-          { path: '*', element: <div>404</div> },
-        ],
-  );
+  const { data: myInfo } = useQuery({
+    queryFn: useCallback(() => services.authService.getMyInfo(), [services]),
+    enabled: token !== null,
+  });
+
+  if (token === null) return <LoginPage authService={services.authService} setToken={setToken} />;
+
+  if (myInfo === undefined)
+    return (
+      <RouterProvider
+        router={createBrowserRouter([
+          { path: '*', element: <Layout />, children: [{ path: '*', element: <CenterLoader /> }] },
+        ])}
+      />
+    );
 
   return (
     <serviceContext.Provider value={services}>
-      <RouterProvider router={router} />
+      <authContext.Provider value={{ myInfo }}>
+        <RouterProvider
+          router={createBrowserRouter([
+            {
+              path: '/',
+              element: <Layout />,
+              children: [
+                { path: '/', element: <ReviewsPage /> },
+                { path: '/snacks', element: <SnacksPage /> },
+                { path: '/snacks/new', element: <SnackCreatePage /> },
+                { path: '/snacks/:snackId', element: <SnackViewPage /> },
+              ],
+            },
+            { path: '*', element: <div>404</div> },
+          ])}
+        />
+      </authContext.Provider>
     </serviceContext.Provider>
   );
 };
