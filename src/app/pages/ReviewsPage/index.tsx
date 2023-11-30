@@ -11,11 +11,12 @@ import { serviceContext } from '../../contexts/serviceContext';
 import { useQuery } from '../../hooks/useQuery';
 import { useTypedContext } from '../../hooks/useTypedContext';
 import { AddReviewModal } from './AddReviewModal';
+import { DeleteReviewModal } from './DeleteReviewModal';
 import styles from './index.module.css';
 
 export const ReviewsPage = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
-  const [reviewState, setReviewState] = useState<{ state: 'idle' } | { state: 'edit'; id: Review['id'] }>({
+  const [reviewState, setReviewState] = useState<{ state: 'idle' } | { state: 'edit' | 'delete'; id: Review['id'] }>({
     state: 'idle',
   });
   const navigate = useNavigate();
@@ -46,9 +47,20 @@ export const ReviewsPage = () => {
                 review={review}
                 state={(() => {
                   if (reviewState.state === 'idle')
-                    return { state: 'idle', onStartEdit: () => setReviewState({ state: 'edit', id: review.id }) };
+                    return {
+                      state: 'idle',
+                      onStartEdit: () => setReviewState({ state: 'edit', id: review.id }),
+                      onStartDelete: () => setReviewState({ state: 'delete', id: review.id }),
+                    };
                   if (reviewState.state === 'edit' && reviewState.id !== review.id) return { state: 'blocked' };
-                  return { state: 'editing', onEndEdit: () => setReviewState({ state: 'idle' }) };
+                  if (reviewState.state === 'delete') return { state: 'blocked' };
+                  return {
+                    state: 'editing',
+                    onEndEdit: () => {
+                      setReviewState({ state: 'idle' });
+                      refetch();
+                    },
+                  };
                 })()}
               />
             </li>
@@ -78,7 +90,12 @@ export const ReviewsPage = () => {
         </div>
       </FAB>
 
-      <AddReviewModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} onSubmitSuccess={refetch} />
+      <AddReviewModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} onAddSuccess={refetch} />
+      <DeleteReviewModal
+        reviewItem={reviewState.state === 'delete' ? reviews?.find((r) => r.id === reviewState.id) ?? null : null}
+        onDeleteSuccess={refetch}
+        onClose={() => setReviewState({ state: 'idle' })}
+      />
     </>
   );
 };

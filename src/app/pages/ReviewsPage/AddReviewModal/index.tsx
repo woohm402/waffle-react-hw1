@@ -13,11 +13,11 @@ type ReviewForm = Partial<{ snackTitle: string; rating: string; content: string 
 export const AddReviewModal = ({
   isOpen,
   onClose,
-  onSubmitSuccess,
+  onAddSuccess,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onSubmitSuccess: () => void;
+  onAddSuccess: () => void;
 }) => {
   const snackTitleId = useId();
   const { reviewService, snackService } = useTypedContext(serviceContext);
@@ -33,7 +33,7 @@ export const AddReviewModal = ({
     try {
       await reviewService.createReview(validationResult.review);
       handleClose();
-      onSubmitSuccess();
+      onAddSuccess();
     } catch (err) {
       //
     }

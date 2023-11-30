@@ -5,7 +5,6 @@ import { authContext } from '../../contexts/authContext';
 import { serviceContext } from '../../contexts/serviceContext';
 import { useMutation } from '../../hooks/useMutation';
 import { useTypedContext } from '../../hooks/useTypedContext';
-import { DeleteReviewModal } from '../../pages/ReviewsPage/DeleteReviewModal';
 import { Button } from '../Button';
 import { ProfileImage } from '../ProfileImage';
 import styles from './index.module.css';
@@ -17,17 +16,15 @@ export const ReviewItem = ({
 }: {
   review: Review;
   state:
-    | { state: 'idle'; onStartEdit: () => void }
+    | { state: 'idle'; onStartEdit: () => void; onStartDelete: () => void }
     | { state: 'editing'; onEndEdit: () => void }
     | { state: 'blocked' };
   showProfile: boolean;
 }) => {
   const [draft, setDraft] = useState<string>();
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const { myInfo } = useTypedContext(authContext);
 
   const { mutate: updateReview } = useUpdateReview(review.id);
-  const { mutate: deleteReview } = useDeleteReview(review.id);
 
   return (
     <div className={styles.reviewItem} data-testid="review">
@@ -43,7 +40,7 @@ export const ReviewItem = ({
                 <Button variant="primary" data-testid="edit-review" onClick={state.onStartEdit}>
                   수정
                 </Button>
-                <Button variant="danger" data-testid="delete-review" onClick={() => setDeleteModalOpen(true)}>
+                <Button variant="danger" data-testid="delete-review" onClick={state.onStartDelete}>
                   삭제
                 </Button>
               </div>
@@ -77,11 +74,6 @@ export const ReviewItem = ({
           <p className={styles.reviewContent}>{review.content}</p>
         )}
       </div>
-      <DeleteReviewModal
-        reviewItem={isDeleteModalOpen ? review : null}
-        onClose={() => setDeleteModalOpen(false)}
-        onDelete={() => deleteReview(undefined, { onSuccess: () => setDeleteModalOpen(false) })}
-      />
     </div>
   );
 };
@@ -90,12 +82,5 @@ const useUpdateReview = (id: Review['id']) => {
   const { reviewService } = useTypedContext(serviceContext);
   return useMutation({
     mutationFn: (req: { content: Review['content'] }) => reviewService.updateReview(id, req),
-  });
-};
-
-const useDeleteReview = (id: Review['id']) => {
-  const { reviewService } = useTypedContext(serviceContext);
-  return useMutation({
-    mutationFn: () => reviewService.deleteReview(id),
   });
 };
