@@ -21,7 +21,11 @@ export const ReviewsPage = () => {
   const navigate = useNavigate();
   const { reviewService } = useTypedContext(serviceContext);
 
-  const { data: reviews, status } = useQuery({
+  const {
+    data: reviews,
+    status,
+    refetch,
+  } = useQuery({
     queryFn: useCallback(() => reviewService.listReviews({}), [reviewService]),
   });
 
@@ -74,7 +78,7 @@ export const ReviewsPage = () => {
         </div>
       </FAB>
 
-      <AddReviewModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} />
+      <AddReviewModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} onSubmitSuccess={refetch} />
     </>
   );
 };

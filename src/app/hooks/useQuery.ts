@@ -6,7 +6,7 @@ export const useQuery = <T = unknown>({
 }: {
   queryFn: () => Promise<T>;
   enabled?: boolean;
-}): { data: T; status: 'success' } | { data: undefined; status: 'pending' } => {
+}): ({ data: T; status: 'success' } | { data: undefined; status: 'pending' }) & { refetch: () => void } => {
   const [data, setData] = useState<T>();
   const [error, setError] = useState<unknown>();
 
@@ -31,9 +31,18 @@ export const useQuery = <T = unknown>({
     };
   }, [queryFn, enabled]);
 
+  const refetch = async () => {
+    try {
+      const data = await queryFn();
+      setData(data);
+    } catch (err) {
+      setError(err);
+    }
+  };
+
   if (error) throw error;
 
-  if (!data) return { data: undefined, status: 'pending' };
+  if (!data) return { data: undefined, status: 'pending', refetch };
 
-  return { data, status: 'success' };
+  return { data, status: 'success', refetch };
 };
