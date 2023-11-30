@@ -5,6 +5,7 @@ import { serviceContext } from '../../contexts/serviceContext';
 import { useMutation } from '../../hooks/useMutation';
 import { useTypedContext } from '../../hooks/useTypedContext';
 import { DeleteReviewModal } from '../../pages/ReviewsPage/DeleteReviewModal';
+import { Button } from '../Button';
 import { ProfileImage } from '../ProfileImage';
 import styles from './index.module.css';
 
@@ -35,17 +36,18 @@ export const ReviewItem = ({
           <span>/</span>
           <b>*{review.rating.toFixed(1)}</b>
           {state.state === 'idle' ? (
-            <div>
-              <button data-testid="edit-review" onClick={state.onStartEdit}>
+            <div className={styles.actions}>
+              <Button variant="primary" data-testid="edit-review" onClick={state.onStartEdit}>
                 수정
-              </button>
-              <button data-testid="delete-review" onClick={() => setDeleteModalOpen(true)}>
+              </Button>
+              <Button variant="danger" data-testid="delete-review" onClick={() => setDeleteModalOpen(true)}>
                 삭제
-              </button>
+              </Button>
             </div>
           ) : state.state === 'editing' ? (
-            <div>
-              <button
+            <div className={styles.actions}>
+              <Button
+                variant="primary"
                 data-testid="edit-review-save"
                 onClick={() => {
                   if (!draft) return;
@@ -53,10 +55,10 @@ export const ReviewItem = ({
                 }}
               >
                 저장
-              </button>
-              <button data-testid="edit-review-cancel" onClick={state.onEndEdit}>
+              </Button>
+              <Button variant="third" data-testid="edit-review-cancel" onClick={state.onEndEdit}>
                 취소
-              </button>
+              </Button>
             </div>
           ) : null}
         </div>

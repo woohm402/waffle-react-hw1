@@ -37,11 +37,18 @@
   height: 40px;
   border-radius: 50%;
   border: none;
-  background-color: chartreuse;
   color: white;
   font-size: 30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   cursor: pointer;
+}
+
+.addModalButton.opened {
+  background-color: rgb(255, 13, 0);
+}
+
+.addModalButton.closed {
+  background-color: chartreuse;
 }
 
 .fabContent {
