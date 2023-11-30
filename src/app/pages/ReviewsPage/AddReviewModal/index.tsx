@@ -10,7 +10,15 @@ import styles from './index.module.css';
 
 type ReviewForm = Partial<{ snackTitle: string; rating: string; content: string }>;
 
-export const AddReviewModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+export const AddReviewModal = ({
+  isOpen,
+  onClose,
+  onAddSuccess,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddSuccess: () => void;
+}) => {
   const snackTitleId = useId();
   const { reviewService, snackService } = useTypedContext(serviceContext);
   const [review, setReview] = useState<ReviewForm>({});
@@ -25,6 +33,7 @@ export const AddReviewModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: 
     try {
       await reviewService.createReview(validationResult.review);
       handleClose();
+      onAddSuccess();
     } catch (err) {
       //
     }
