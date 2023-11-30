@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { createSnackSrc, createSnackTitle } from '../../../entities/snack';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { ProfileImage } from '../../components/ProfileImage';
@@ -10,15 +9,19 @@ import { useTypedContext } from '../../hooks/useTypedContext';
 import styles from './index.module.css';
 
 export const SnackCreatePage = () => {
-  const [src, setSrc] = useState('');
-  const [title, setTitle] = useState('');
+  const [snackForm, setSnackForm] = useState<Partial<{ src: string; title: string }>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof typeof snackForm, string>>>({});
 
   const navigate = useNavigate();
   const { snackService } = useTypedContext(serviceContext);
 
+  const isValid = snackForm.src && snackForm.title;
+
   const onSubmit = async () => {
     try {
-      const createdSnack = await snackService.createSnack({ title: createSnackTitle(title), src: createSnackSrc(src) });
+      const validationResult = snackService.validateSnack(snackForm);
+      if (!validationResult.valid) return setErrors(validationResult.errors);
+      const createdSnack = await snackService.createSnack(validationResult.snack);
       navigate(`/snacks/${createdSnack.id}`);
     } catch (err) {
       console.log(err);
@@ -34,11 +37,23 @@ export const SnackCreatePage = () => {
       }}
     >
       <h3 className={styles.title}>새 과자</h3>
-      <ProfileImage src={src || undefined} />
-      <Input label="이미지" value={src} onChange={(e) => setSrc(e.target.value)} />
-      <Input label="이름" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <ProfileImage src={snackForm.src} />
+      <Input
+        label="이미지"
+        value={snackForm.src ?? ''}
+        onChange={(e) => setSnackForm({ ...snackForm, src: e.target.value })}
+        errorMessage={errors.src}
+      />
+      <Input
+        label="이름"
+        value={snackForm.title ?? ''}
+        onChange={(e) => setSnackForm({ ...snackForm, title: e.target.value })}
+        errorMessage={errors.title}
+      />
       <div className={styles.actions}>
-        <Button variant="primary">추가</Button>
+        <Button variant="primary" disabled={!isValid}>
+          추가
+        </Button>
         <Button type="button" variant="third" onClick={() => navigate(-1)}>
           취소
         </Button>
