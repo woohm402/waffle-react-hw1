@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { type Review } from '../../../entities/review';
+import { classNames } from '../../../utils/classNames';
 import { Button } from '../../components/Button';
 import { FAB } from '../../components/FAB';
 import { ReviewItem } from '../../components/ReviewItem';
@@ -53,12 +54,12 @@ export const ReviewsPage = () => {
       <FAB
         className={styles.fab}
         trigger={
-          <button data-testid="write-review" className={styles.addModalButton}>
+          <button data-testid="write-review" className={classNames(styles.addModalButton, styles.closed)}>
             +
           </button>
         }
         openedTrigger={
-          <button data-testid="write-review" className={styles.addModalButton}>
+          <button data-testid="write-review" className={classNames(styles.addModalButton, styles.opened)}>
             X
           </button>
         }

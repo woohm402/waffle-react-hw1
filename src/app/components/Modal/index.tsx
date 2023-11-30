@@ -3,6 +3,7 @@ import './index.css';
 import { type PropsWithChildren } from 'react';
 
 import { classNames } from '../../../utils/classNames';
+import { Portal } from '../Portal';
 
 export const Modal = ({
   isOpen,
@@ -15,7 +16,7 @@ export const Modal = ({
   'data-testid'?: string;
 }>) => {
   return (
-    <div>
+    <Portal>
       <div className={classNames('modalDimmer', isOpen ? 'visible' : 'hidden')} onClick={onClose} />
 
       {isOpen && (
@@ -23,6 +24,6 @@ export const Modal = ({
           {children}
         </div>
       )}
-    </div>
+    </Portal>
   );
 };
