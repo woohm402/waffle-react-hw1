@@ -5,6 +5,7 @@ import { type Review } from '../../../entities/review';
 import { Button } from '../../components/Button';
 import { FAB } from '../../components/FAB';
 import { ReviewItem } from '../../components/ReviewItem';
+import { Skeleton } from '../../components/Skeleton';
 import { serviceContext } from '../../contexts/serviceContext';
 import { useQuery } from '../../hooks/useQuery';
 import { useTypedContext } from '../../hooks/useTypedContext';
@@ -19,25 +20,35 @@ export const ReviewsPage = () => {
   const navigate = useNavigate();
   const { reviewService } = useTypedContext(serviceContext);
 
-  const { data: reviews } = useQuery({ queryFn: useCallback(() => reviewService.listReviews({}), [reviewService]) });
+  const { data: reviews, status } = useQuery({
+    queryFn: useCallback(() => reviewService.listReviews({}), [reviewService]),
+  });
 
   return (
     <>
       <ul className={styles.reviewList} data-testid="review-list">
-        {reviews?.map((review) => (
-          <li key={review.id}>
-            <ReviewItem
-              showProfile
-              review={review}
-              state={(() => {
-                if (reviewState.state === 'idle')
-                  return { state: 'idle', onStartEdit: () => setReviewState({ state: 'edit', id: review.id }) };
-                if (reviewState.state === 'edit' && reviewState.id !== review.id) return { state: 'blocked' };
-                return { state: 'editing', onEndEdit: () => setReviewState({ state: 'idle' }) };
-              })()}
-            />
-          </li>
-        ))}
+        {status === 'pending' ? (
+          <>
+            <Skeleton className={styles.skeleton} />
+            <Skeleton className={styles.skeleton} />
+            <Skeleton className={styles.skeleton} />
+          </>
+        ) : (
+          reviews.map((review) => (
+            <li key={review.id}>
+              <ReviewItem
+                showProfile
+                review={review}
+                state={(() => {
+                  if (reviewState.state === 'idle')
+                    return { state: 'idle', onStartEdit: () => setReviewState({ state: 'edit', id: review.id }) };
+                  if (reviewState.state === 'edit' && reviewState.id !== review.id) return { state: 'blocked' };
+                  return { state: 'editing', onEndEdit: () => setReviewState({ state: 'idle' }) };
+                })()}
+              />
+            </li>
+          ))
+        )}
       </ul>
       <FAB
         className={styles.fab}

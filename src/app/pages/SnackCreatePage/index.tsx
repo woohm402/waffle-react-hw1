@@ -34,7 +34,7 @@ export const SnackCreatePage = () => {
       }}
     >
       <h3 className={styles.title}>새 과자</h3>
-      <ProfileImage />
+      <ProfileImage src={src || undefined} />
       <Input label="이미지" value={src} onChange={(e) => setSrc(e.target.value)} />
       <Input label="이름" value={title} onChange={(e) => setTitle(e.target.value)} />
       <div className={styles.actions}>
