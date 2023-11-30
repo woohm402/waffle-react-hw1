@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { type Review } from '../../../entities/review';
 import { classNames } from '../../../utils/classNames';
 import { Button } from '../../components/Button';
+import { DeleteReviewModal } from '../../components/DeleteReviewModal';
 import { FAB } from '../../components/FAB';
 import { ReviewItem } from '../../components/ReviewItem';
 import { Skeleton } from '../../components/Skeleton';
@@ -11,7 +12,6 @@ import { serviceContext } from '../../contexts/serviceContext';
 import { useQuery } from '../../hooks/useQuery';
 import { useTypedContext } from '../../hooks/useTypedContext';
 import { AddReviewModal } from './AddReviewModal';
-import { DeleteReviewModal } from './DeleteReviewModal';
 import styles from './index.module.css';
 
 export const ReviewsPage = () => {

@@ -1,9 +1,9 @@
-import { type Review } from '../../../../entities/review';
-import { Button } from '../../../components/Button';
-import { Modal } from '../../../components/Modal';
-import { serviceContext } from '../../../contexts/serviceContext';
-import { useMutation } from '../../../hooks/useMutation';
-import { useTypedContext } from '../../../hooks/useTypedContext';
+import { type Review } from '../../../entities/review';
+import { serviceContext } from '../../contexts/serviceContext';
+import { useMutation } from '../../hooks/useMutation';
+import { useTypedContext } from '../../hooks/useTypedContext';
+import { Button } from '../Button';
+import { Modal } from '../Modal';
 import styles from './index.module.css';
 
 export const DeleteReviewModal = ({

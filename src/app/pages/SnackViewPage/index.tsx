@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { type Review } from '../../../entities/review';
 import { createSnackId } from '../../../entities/snack';
+import { DeleteReviewModal } from '../../components/DeleteReviewModal';
 import { ReviewItem } from '../../components/ReviewItem';
 import { Skeleton } from '../../components/Skeleton';
 import { SnackCard } from '../../components/SnackCard';
@@ -14,7 +15,7 @@ import styles from './index.module.css';
 export const SnackViewPage = () => {
   const { snackId: snackIdParam } = useParams();
   const { snackService, reviewService } = useTypedContext(serviceContext);
-  const [reviewState, setReviewState] = useState<{ state: 'idle' } | { state: 'edit'; id: Review['id'] }>({
+  const [reviewState, setReviewState] = useState<{ state: 'idle' } | { state: 'edit' | 'delete'; id: Review['id'] }>({
     state: 'idle',
   });
 
@@ -25,7 +26,7 @@ export const SnackViewPage = () => {
   const { data: snack } = useQuery({
     queryFn: useCallback(() => snackService.getSnack(snackId), [snackService, snackId]),
   });
-  const { data: reviews } = useQuery({
+  const { data: reviews, refetch } = useQuery({
     queryFn: useCallback(() => reviewService.listReviews({ snackId }), [reviewService, snackId]),
   });
 
@@ -49,15 +50,31 @@ export const SnackViewPage = () => {
                 review={review}
                 state={(() => {
                   if (reviewState.state === 'idle')
-                    return { state: 'idle', onStartEdit: () => setReviewState({ state: 'edit', id: review.id }) };
+                    return {
+                      state: 'idle',
+                      onStartEdit: () => setReviewState({ state: 'edit', id: review.id }),
+                      onStartDelete: () => setReviewState({ state: 'delete', id: review.id }),
+                    };
                   if (reviewState.state === 'edit' && reviewState.id !== review.id) return { state: 'blocked' };
-                  return { state: 'editing', onEndEdit: () => setReviewState({ state: 'idle' }) };
+                  if (reviewState.state === 'delete') return { state: 'blocked' };
+                  return {
+                    state: 'editing',
+                    onEndEdit: () => {
+                      setReviewState({ state: 'idle' });
+                      refetch();
+                    },
+                  };
                 })()}
               />
             </li>
           ))
         )}
       </ul>
+      <DeleteReviewModal
+        reviewItem={reviewState.state === 'delete' ? reviews?.find((r) => r.id === reviewState.id) ?? null : null}
+        onDeleteSuccess={refetch}
+        onClose={() => setReviewState({ state: 'idle' })}
+      />
     </div>
   );
 };
