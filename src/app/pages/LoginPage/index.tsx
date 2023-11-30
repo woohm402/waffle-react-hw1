@@ -40,7 +40,7 @@ export const LoginPage = ({
       }}
     >
       <Input value={username} onChange={(e) => setUsername(e.target.value)} label="아이디" />
-      <Input value={password} onChange={(e) => setPassword(e.target.value)} label="비밀번호" />
+      <Input value={password} onChange={(e) => setPassword(e.target.value)} label="비밀번호" type="password" />
       <Button className={styles.button} variant="primary" disabled={!isValid}>
         로그인
       </Button>
