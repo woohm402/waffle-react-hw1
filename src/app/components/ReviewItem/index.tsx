@@ -36,7 +36,7 @@ export const ReviewItem = ({
           <span>/</span>
           <b>*{review.rating.toFixed(1)}</b>
           {state.state === 'idle' ? (
-            <div className={styles.actions}>
+            <div>
               <Button variant="primary" data-testid="edit-review" onClick={state.onStartEdit}>
                 수정
               </Button>
@@ -45,7 +45,7 @@ export const ReviewItem = ({
               </Button>
             </div>
           ) : state.state === 'editing' ? (
-            <div className={styles.actions}>
+            <div>
               <Button
                 variant="primary"
                 data-testid="edit-review-save"
